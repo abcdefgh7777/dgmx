@@ -42,12 +42,13 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Health check endpoint
 app.get('/health', (req, res) => {
-  res.status(200).json({ 
-    status: 'ok', 
+  res.status(200).json({
+    status: 'ok',
     timestamp: new Date().toISOString(),
-    port: PORT 
+    port: PORT
   });
 });
+
 
 // Routes
 app.get('/', async (req, res) => {
