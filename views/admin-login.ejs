@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DigiPump Admin Terminal</title>
+    <link rel="icon" type="image/png" href="/fav.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #15161B;
+            color: #00ff00;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.4;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .terminal-login {
+            border: 1px solid #333333;
+            background: #15161B;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        .terminal-login::before {
+            content: '┌──────────────────────────────────────────────┐';
+            display: block;
+            color: #333333;
+            margin-bottom: 15px;
+        }
+        
+        .terminal-login::after {
+            content: '└──────────────────────────────────────────────┘';
+            display: block;
+            color: #333333;
+            margin-top: 15px;
+        }
+        
+        .prompt::before {
+            content: '$ ';
+            color: #ffffff;
+        }
+        
+        .input-field {
+            background: #15161B;
+            border: 1px solid #333333;
+            color: #00ff00;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            padding: 10px;
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #00ff00;
+        }
+        
+        .btn-terminal {
+            background: #333333;
+            border: 1px solid #666666;
+            color: #ffffff;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-terminal:hover {
+            background: #666666;
+            color: #15161B;
+        }
+        
+        .error-msg {
+            color: #ff0000;
+            margin: 10px 0;
+            font-size: 12px;
+        }
+        
+        .info-msg {
+            color: #00ffff;
+            font-size: 12px;
+            margin: 5px 0;
+        }
+        
+        .cursor {
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal-login">
+        <div class="prompt">pumpverse --admin-login</div>
+        <div style="color: #888888; font-size: 12px; margin: 10px 0;">
+            DigiPump Admin Terminal v1.0.0<br>
+            Digital Pet Sanctuary Management Interface
+        </div>
+        <br>
+        
+        <form method="POST" action="/admin/login">
+            <div style="color: #00ffff; margin: 10px 0;">
+                Requesting administrator credentials...
+            </div>
+            
+            <div style="margin: 15px 0;">
+                <div style="color: #ffffff; margin-bottom: 5px;">Password:</div>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    required 
+                    class="input-field"
+                    placeholder="Enter admin password"
+                    autofocus
+                >
+            </div>
+            
+            <% if (error) { %>
+                <div class="error-msg">
+                    ERROR: <%= error %>
+                </div>
+            <% } %>
+            
+            <div style="margin: 20px 0;">
+                <button type="submit" class="btn-terminal">
+                    [AUTHENTICATE]
+                </button>
+            </div>
+        </form>
+        
+        <div style="border-top: 1px solid #333333; margin: 20px 0; padding-top: 15px;">
+            <div class="info-msg">Available commands:</div>
+            <div style="color: #888888; font-size: 11px; margin: 5px 0;">
+                &nbsp;&nbsp;pumpverse --home&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Return to main terminal<br>
+                &nbsp;&nbsp;pumpverse --help&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Show help information
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin: 15px 0;">
+            <a href="/" style="color: #666666; text-decoration: none; font-size: 12px;">
+                [ESC] Return to main terminal
+            </a>
+        </div>
+        
+        <div style="border-top: 1px solid #333333; padding-top: 15px; text-align: center;">
+            <div style="color: #333333; font-size: 10px;">
+                Default credentials: admin123
+            </div>
+            <div style="color: #333333; font-size: 10px;">
+                For security, change default password in production
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Auto-focus password field
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('password').focus();
+        });
+        
+        // Handle Enter key
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                this.form.submit();
+            }
+        });
+    </script>
+</body>
+</html>

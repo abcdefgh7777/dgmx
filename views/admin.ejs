@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Digimon X Digital Monster Manager</title>
+    <link rel="icon" type="image/png" href="/fav.png">
+    <!-- Digimon Digital Theme CSS -->
+    <link rel="stylesheet" href="/digivice-theme.css">
+    <style>
+        body {
+            background: #F8F3F8;
+            min-height: 100vh;
+            font-family: 'Pokemon GB', 'Courier New', monospace;
+            font-size: 12px;
+            padding: 2em;
+            color: #181010;
+            image-rendering: pixelated;
+            font-smooth: never;
+            -webkit-font-smoothing: none;
+        }
+        .container {
+            max-width: 1200px;
+        }
+        .admin-card {
+            margin-bottom: 20px;
+        }
+        .pet-card {
+            background: white;
+            border: 3px solid #181010;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .ascii-art {
+            font-family: 'Pixel Digivolve', 'PixelMplus12', monospace;
+            line-height: 1.4;
+            color: #48A058;
+            font-size: 10px;
+        }
+        .header-title {
+            text-transform: uppercase;
+            font-family: 'Pixel Digivolve', 'PixelMplus12', monospace;
+            color: #181010;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        .tab-button {
+            background: #48A058;
+            color: #F8F3F8;
+            text-transform: uppercase;
+            font-family: 'Pixel Digivolve', 'PixelMplus12', monospace;
+            padding: 10px 20px;
+            border: none;
+            margin: 5px;
+            cursor: pointer;
+            font-size: 11px;
+            box-shadow: inset -2px -2px 0 #2a5930, inset 2px 2px 0 #6ac77a;
+        }
+        .tab-button:hover {
+            background: #6ac77a;
+            transform: scale(1.05);
+        }
+        .tab-button.active {
+            background: #F0B088;
+            box-shadow: inset -2px -2px 0 #d09060, inset 2px 2px 0 #ffd0a8;
+        }
+        .modal {
+            background: rgba(24, 16, 16, 0.9);
+        }
+        .btn-primary {
+            background: #48A058;
+            color: #F8F3F8;
+            padding: 8px 16px;
+            border: none;
+            text-transform: uppercase;
+            font-family: 'Pixel Digivolve', 'PixelMplus12', monospace;
+            cursor: pointer;
+            font-size: 10px;
+            box-shadow: inset -2px -2px 0 #2a5930, inset 2px 2px 0 #6ac77a;
+        }
+        .btn-primary:hover {
+            background: #6ac77a;
+        }
+        .btn-danger {
+            background: #B3181C;
+            color: #F8F3F8;
+            padding: 8px 16px;
+            border: none;
+            text-transform: uppercase;
+            font-family: 'Pixel Digivolve', 'PixelMplus12', monospace;
+            cursor: pointer;
+            font-size: 10px;
+            box-shadow: inset -2px -2px 0 #851014, inset 2px 2px 0 #d53034;
+        }
+        .btn-danger:hover {
+            background: #d53034;
+        }
+        .btn-secondary {
+            background: #F0B088;
+            color: #181010;
+            padding: 8px 16px;
+            border: none;
+            text-transform: uppercase;
+            font-family: 'Pixel Digivolve', 'PixelMplus12', monospace;
+            cursor: pointer;
+            font-size: 10px;
+            box-shadow: inset -2px -2px 0 #d09060, inset 2px 2px 0 #ffd0a8;
+        }
+        .btn-secondary:hover {
+            background: #ffd0a8;
+        }
+        input, textarea, select {
+            background: white;
+            border: 3px solid #181010;
+            padding: 8px;
+            font-family: 'Pixel Digivolve', 'PixelMplus12', monospace;
+            font-size: 10px;
+            color: #181010;
+            width: 100%;
+            text-transform: uppercase;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #48A058;
+            box-shadow: 0 0 0 2px #48A058;
+        }
+        label {
+            text-transform: uppercase;
+            font-size: 10px;
+            margin-bottom: 5px;
+            display: block;
+            color: #181010;
+        }
+        .grid-cols-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .text-center { text-align: center; }
+        .mb-2 { margin-bottom: 8px; }
+        .mb-3 { margin-bottom: 12px; }
+        .mb-4 { margin-bottom: 16px; }
+        .mb-6 { margin-bottom: 24px; }
+        .mb-8 { margin-bottom: 32px; }
+        .px-2 { padding-left: 8px; padding-right: 8px; }
+        .py-1 { padding-top: 4px; padding-bottom: 4px; }
+        .px-4 { padding-left: 16px; padding-right: 16px; }
+        .py-2 { padding-top: 8px; padding-bottom: 8px; }
+        .rounded { border-radius: 4px; }
+        .rounded-lg { border-radius: 8px; }
+        .text-xs { font-size: 9px; }
+        .text-sm { font-size: 10px; }
+        .text-2xl { font-size: 16px; }
+        .text-4xl { font-size: 20px; }
+        .font-bold { font-weight: normal; }
+        .flex { display: flex; }
+        .justify-center { justify-content: center; }
+        .space-x-4 > * + * { margin-left: 16px; }
+        .gap-2 { gap: 8px; }
+        .flex-wrap { flex-wrap: wrap; }
+        .hidden { display: none; }
+        .block { display: block; }
+        .inline-block { display: inline-block; }
+        .w-full { width: 100%; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+    </style>
+</head>
+<body>
+    <div class="container wrapper mx-auto">
+        <header class="framed primary text-center mb-8">
+            <h1 class="header-title">Tamer Admin Panel</h1>
+            <p class="text-sm mb-4">Manage your Digimon collection</p>
+            <div class="flex justify-center space-x-4">
+                <a href="/" class="btn-secondary inline-block">
+                    Home
+                </a>
+                <a href="/admin/logout" class="btn-danger inline-block">
+                    Logout
+                </a>
+            </div>
+        </header>
+
+        <!-- Tab Navigation -->
+        <div class="admin-card framed neutral mb-6">
+            <div class="flex flex-wrap gap-2 justify-center mb-6">
+                <button onclick="showTab('pets')" class="tab-button active" id="pets-tab">
+                    Manage Digimon
+                </button>
+                <button onclick="showTab('add-pet')" class="tab-button" id="add-pet-tab">
+                    Add Digimon
+                </button>
+                <button onclick="showTab('templates')" class="tab-button" id="templates-tab">
+                    Templates
+                </button>
+                <button onclick="showTab('ai-generate')" class="tab-button" id="ai-generate-tab">
+                    Capture Digimon
+                </button>
+                <button onclick="showTab('x-agent')" class="tab-button" id="x-agent-tab">
+                    X Agent
+                </button>
+            </div>
+
+            <!-- Manage Pets Tab -->
+            <div id="pets-content" class="tab-content">
+                <h2 class="text-2xl font-bold mb-4">Your Digimon Collection</h2>
+                <% if (pets && pets.length > 0) { %>
+                    <div class="grid-cols-3">
+                        <% pets.forEach(pet => { %>
+                            <div class="pet-card framed no-hd">
+                                <div class="text-center mb-3">
+                                    <% if (pet.ascii && pet.ascii.startsWith('/digimon/')) { %>
+                                        <!-- Display Digimon GIF -->
+                                        <div class="framed no-hd mb-2" style="height: 100px; display: flex; align-items: center; justify-content: center; background: white;">
+                                            <img src="<%= pet.ascii %>" alt="<%= pet.name %>" style="max-width: 100%; max-height: 80px; object-fit: contain;" />
+                                        </div>
+                                    <% } else { %>
+                                        <!-- Fallback to ASCII for old entries -->
+                                        <pre class="ascii-art text-xs framed no-hd mb-2" style="background: white; padding: 10px;"><%= pet.ascii %></pre>
+                                    <% } %>
+                                    <h3 class="font-bold" style="color: #181010; text-transform: uppercase;"><%= pet.name %></h3>
+                                    <p class="text-sm" style="color: #48A058; text-transform: uppercase;"><%= pet.race %></p>
+                                    <p class="text-xs" style="color: #B3181C; text-transform: uppercase;"><%= pet.ownerHandle %></p>
+                                </div>
+                                
+                                <div class="text-center text-sm mb-3">
+                                    <span class="px-2 py-1 text-xs" style="background: #48A058; color: #F8F3F8; text-transform: uppercase;"><%= pet.status %></span>
+                                    <span class="px-2 py-1 text-xs" style="background: #F0B088; color: #181010; margin-left: 4px; text-transform: uppercase;">
+                                        <% if (pet.growth_stage === 'Baby') { %>B<% } %>
+                                        <% if (pet.growth_stage === 'Teen') { %>T<% } %>
+                                        <% if (pet.growth_stage === 'Adult') { %>A<% } %>
+                                        <%= pet.growth_stage %>
+                                    </span>
+                                    <div style="margin-top: 4px;">
+                                        <span class="text-xs" style="color: #48A058; text-transform: uppercase;">Fed <%= pet.feed_count %> times</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex gap-2 justify-center">
+                                    <button onclick="feedPet(<%= pet.id %>)" class="btn-primary text-xs">
+                                        Feed
+                                    </button>
+                                    <button onclick="generateStatusCard(<%= pet.id %>)" class="btn-secondary text-xs">
+                                        Status
+                                    </button>
+                                    <button onclick="editPet(<%= pet.id %>)" class="btn-primary text-xs">
+                                        Edit
+                                    </button>
+                                    <button onclick="deletePet(<%= pet.id %>)" class="btn-danger text-xs">
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                <% } else { %>
+                    <div class="text-center py-8">
+                        <p class="text-slate-400">No Digimon yet. Start capturing!</p>
+                    </div>
+                <% } %>
+            </div>
+
+            <!-- Add Pet Tab -->
+            <div id="add-pet-content" class="tab-content hidden">
+                <h2 class="text-2xl font-bold mb-4">➕ Add New Digimon</h2>
+                <form id="add-pet-form" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">ASCII Art</label>
+                            <textarea id="pet-ascii" rows="8" class="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded text-white font-mono text-sm" placeholder="Paste ASCII art here..."></textarea>
+                        </div>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Name</label>
+                                <input type="text" id="pet-name" class="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded text-white">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Type</label>
+                                <input type="text" id="pet-race" class="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded text-white">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Owner X Link</label>
+                                <input type="url" id="pet-owner" class="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded text-white" placeholder="https://x.com/username">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Status</label>
+                                <select id="pet-status" class="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded text-white">
+                                    <option value="Happy">😊 Happy</option>
+                                    <option value="Sleepy">😴 Sleepy</option>
+                                    <option value="Excited">🤩 Excited</option>
+                                    <option value="Calm">😌 Calm</option>
+                                    <option value="Playful">🎮 Playful</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg font-medium transition duration-300">
+                        🎉 Add Digimon
+                    </button>
+                </form>
+            </div>
+
+            <!-- Templates Tab -->
+            <div id="templates-content" class="tab-content hidden">
+                <h2 class="text-2xl font-bold mb-4">📝 ASCII Templates</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <% templates.forEach(template => { %>
+                        <div class="pet-card rounded-lg p-4">
+                            <div class="text-center mb-3">
+                                <pre class="ascii-art text-xs bg-gray-900 p-3 rounded mb-2"><%= template.ascii %></pre>
+                                <h3 class="font-bold text-white"><%= template.name %></h3>
+                                <p class="text-cyan-300 text-sm"><%= template.race %></p>
+                            </div>
+                            <button onclick="useTemplate(<%= template.id %>)" class="w-full bg-purple-600 hover:bg-purple-700 px-3 py-2 rounded text-sm transition duration-300">
+                                🎯 Use Template
+                            </button>
+                        </div>
+                    <% }); %>
+                </div>
+            </div>
+
+            <!-- AI Generate Tab -->
+            <div id="ai-generate-content" class="tab-content hidden">
+                <h2 class="text-2xl font-bold mb-4">⚡ Capture Wild Digimon</h2>
+                <div class="max-w-2xl mx-auto">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Owner X Link</label>
+                            <input type="url" id="ai-owner" class="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded text-white" placeholder="https://x.com/username">
+                        </div>
+                        <button onclick="captureDigimon()" class="w-full bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-lg font-medium transition duration-300">
+                            ⚡ Enter Digital World!
+                        </button>
+                    </div>
+                    
+                    <div id="ai-preview" class="hidden mt-6 p-4 bg-gray-800 rounded-lg">
+                        <h3 class="text-lg font-bold mb-3">🔍 Captured Digimon Preview</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <div id="ai-gif-container" class="bg-gray-900 p-3 rounded text-center" style="height: 120px; display: none; align-items: center; justify-content: center;">
+                                    <img id="ai-gif" style="max-width: 100%; max-height: 100px; object-fit: contain;" />
+                                </div>
+                                <pre id="ai-ascii" class="ascii-art text-xs bg-gray-900 p-3 rounded"></pre>
+                            </div>
+                            <div class="space-y-2">
+                                <p><strong>Name:</strong> <span id="ai-name"></span></p>
+                                <p><strong>Type:</strong> <span id="ai-race"></span></p>
+                                <p><strong>Trainer:</strong> <span id="ai-owner-display"></span></p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex gap-2">
+                            <button onclick="acceptGenerated()" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded transition duration-300">
+                                ✅ Accept & Add Pet
+                            </button>
+                            <button onclick="generateSocialCard()" class="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded transition duration-300">
+                                📱 Generate Social Card
+                            </button>
+                            <button onclick="generatePet()" class="bg-yellow-600 hover:bg-yellow-700 px-4 py-2 rounded transition duration-300">
+                                🔄 Generate Another
+                            </button>
+                            <button onclick="hidePreview()" class="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded transition duration-300">
+                                ❌ Cancel
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Social Media Card Generator -->
+                    <div id="social-card-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50">
+                        <div class="flex items-center justify-center min-h-screen p-4">
+                            <div class="bg-gray-800 rounded-lg p-6 max-w-lg w-full">
+                                <h3 class="text-xl font-bold mb-4">📱 DIGIMON X Capture Card</h3>
+                                
+                                <div class="mb-4">
+                                    <canvas id="social-canvas" width="800" height="600" style="max-width: 100%; border: 1px solid #666;"></canvas>
+                                </div>
+                                
+                                <div class="flex gap-2">
+                                    <button onclick="downloadSocialCard()" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded transition duration-300">
+                                        💾 Download Image
+                                    </button>
+                                    <button onclick="copySocialCard()" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded transition duration-300">
+                                        📋 Copy to Clipboard
+                                    </button>
+                                    <button onclick="closeSocialCard()" class="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded transition duration-300">
+                                        ❌ Close
+                                    </button>
+                                </div>
+                                
+                                <div class="mt-4 p-3 bg-gray-700 rounded text-sm">
+                                    <p class="text-green-400">💡 Tip: Download the image and share it on X/Twitter!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- X Agent Tab -->
+            <div id="x-agent-content" class="tab-content hidden">
+                <h2 style="font-size:16px; margin-bottom:15px; text-transform:uppercase; font-family:'Pokemon GB',monospace;">X Agent Control Panel</h2>
+
+                <!-- Agent Status -->
+                <div style="background:#181010; border:3px solid #48A058; padding:15px; margin-bottom:15px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                        <span style="color:#48A058; font-size:11px;">AGENT STATUS</span>
+                        <span id="agent-status-badge" style="padding:3px 10px; font-size:10px; background:#B3181C; color:#F8F3F8;">OFFLINE</span>
+                    </div>
+                    <div style="color:#F8F3F8; font-size:10px; line-height:2;">
+                        <div>Bot: @<span id="agent-bot-name">digimononx</span></div>
+                        <div>Replies Today: <span id="agent-replies-today">0</span></div>
+                        <div>Total Replies: <span id="agent-replies-total">0</span></div>
+                        <div>Last Checked: <span id="agent-last-checked">never</span></div>
+                        <div>Last Error: <span id="agent-last-error" style="color:#B3181C;">none</span></div>
+                    </div>
+                    <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+                        <button onclick="startAgent()" class="btn-primary" style="font-size:9px;">START AGENT</button>
+                        <button onclick="stopAgent()" class="btn-danger" style="font-size:9px;">STOP AGENT</button>
+                        <button onclick="refreshAgentStatus()" class="btn-secondary" style="font-size:9px;">REFRESH</button>
+                        <button onclick="clearReplies()" class="btn-secondary" style="font-size:9px;">CLEAR LOGS</button>
+                        <button onclick="clearFailed()" class="btn-secondary" style="font-size:9px;">RETRY FAILED</button>
+                        <button onclick="backfillAvatars()" class="btn-secondary" style="font-size:9px;">BACKFILL AVATARS</button>
+                    </div>
+                </div>
+
+                <!-- Test Agent Reply -->
+                <div style="background:#181010; border:3px solid #F0B088; padding:15px; margin-bottom:15px;">
+                    <div style="color:#F0B088; font-size:11px; margin-bottom:10px;">TEST AGENT REPLY (PREVIEW BEFORE POSTING)</div>
+                    <div style="color:#888; font-size:9px; margin-bottom:8px;">Simulate a mention to see how the agent would reply. Nothing is posted to X.</div>
+                    <div style="display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap;">
+                        <input type="text" id="test-username" placeholder="@username" value="testuser"
+                               style="background:#222; border:2px solid #F0B088; color:#F8F3F8; padding:6px 10px; font-family:'Pokemon GB',monospace; font-size:10px; width:120px;">
+                        <input type="text" id="test-message" placeholder="Type a command... (tame, check, feed, battle, digivolve)"
+                               style="background:#222; border:2px solid #F0B088; color:#F8F3F8; padding:6px 10px; font-family:'Pokemon GB',monospace; font-size:10px; flex:1; min-width:200px;">
+                        <button onclick="testAgentReply()" class="btn-primary" style="font-size:9px; background:#F0B088; color:#181010;">TEST REPLY</button>
+                    </div>
+                    <div style="display:flex; gap:5px; flex-wrap:wrap; margin-bottom:10px;">
+                        <button onclick="quickTest('tame digimon')" style="background:#333;color:#48A058;border:1px solid #48A058;padding:3px 8px;font-size:9px;cursor:pointer;font-family:'Pokemon GB',monospace;">tame</button>
+                        <button onclick="quickTest('check my digimon')" style="background:#333;color:#48A058;border:1px solid #48A058;padding:3px 8px;font-size:9px;cursor:pointer;font-family:'Pokemon GB',monospace;">check</button>
+                        <button onclick="quickTest('feed my first digimon')" style="background:#333;color:#48A058;border:1px solid #48A058;padding:3px 8px;font-size:9px;cursor:pointer;font-family:'Pokemon GB',monospace;">feed</button>
+                        <button onclick="quickTest('battle someone')" style="background:#333;color:#48A058;border:1px solid #48A058;padding:3px 8px;font-size:9px;cursor:pointer;font-family:'Pokemon GB',monospace;">battle</button>
+                        <button onclick="quickTest('digivolve my digimon')" style="background:#333;color:#48A058;border:1px solid #48A058;padding:3px 8px;font-size:9px;cursor:pointer;font-family:'Pokemon GB',monospace;">digivolve</button>
+                        <button onclick="quickTest('format device')" style="background:#333;color:#48A058;border:1px solid #48A058;padding:3px 8px;font-size:9px;cursor:pointer;font-family:'Pokemon GB',monospace;">format</button>
+                        <button onclick="quickTest('help')" style="background:#333;color:#48A058;border:1px solid #48A058;padding:3px 8px;font-size:9px;cursor:pointer;font-family:'Pokemon GB',monospace;">help</button>
+                        <button onclick="quickTest('take my agumon for a walk')" style="background:#333;color:#48A058;border:1px solid #48A058;padding:3px 8px;font-size:9px;cursor:pointer;font-family:'Pokemon GB',monospace;">activity</button>
+                        <button onclick="quickTest('hello how does this work?')" style="background:#333;color:#48A058;border:1px solid #48A058;padding:3px 8px;font-size:9px;cursor:pointer;font-family:'Pokemon GB',monospace;">chat</button>
+                        <button onclick="quickTest('how do i get a digimon?')" style="background:#333;color:#F0B088;border:1px solid #F0B088;padding:3px 8px;font-size:9px;cursor:pointer;font-family:'Pokemon GB',monospace;">how to get</button>
+                    </div>
+
+                    <!-- Test Result -->
+                    <div id="test-result" style="display:none; background:#0a0a0a; border:2px solid #333; padding:12px; margin-top:10px;">
+                        <div style="color:#48A058; font-size:10px; margin-bottom:5px;">AGENT RESPONSE:</div>
+                        <div style="color:#F0B088; font-size:9px; margin-bottom:5px;">Command: <span id="test-result-command"></span></div>
+                        <div id="test-result-text" style="color:#F8F3F8; font-size:10px; line-height:1.6; word-break:break-word; white-space:pre-wrap;"></div>
+                        <div id="test-result-image-container" style="display:none; margin-top:10px; text-align:center;">
+                            <img id="test-result-image" style="max-width:100%; border:2px solid #48A058; image-rendering:pixelated;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Replies Log -->
+                <div style="background:#181010; border:3px solid #48A058; padding:15px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                        <span style="color:#48A058; font-size:11px;">RECENT REPLY LOG</span>
+                        <button onclick="loadRecentReplies()" class="btn-secondary" style="font-size:9px;">RELOAD</button>
+                    </div>
+                    <div id="replies-log" style="max-height:400px; overflow-y:auto; font-size:9px; color:#F8F3F8;">
+                        <div style="color:#888;">Loading...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Pet Modal -->
+    <div id="edit-modal" class="fixed inset-0 bg-black bg-opacity-50 modal hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="admin-card rounded-lg p-6 w-full max-w-2xl">
+                <h3 class="text-xl font-bold mb-4">✏️ Edit Pet</h3>
+                <form id="edit-pet-form" class="space-y-4">
+                    <input type="hidden" id="edit-pet-id">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">ASCII Art</label>
+                            <textarea id="edit-pet-ascii" rows="8" class="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded text-white font-mono text-sm"></textarea>
+                        </div>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Name</label>
+                                <input type="text" id="edit-pet-name" class="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded text-white">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Type</label>
+                                <input type="text" id="edit-pet-race" class="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded text-white">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Owner X Link</label>
+                                <input type="url" id="edit-pet-owner" class="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded text-white">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Status</label>
+                                <select id="edit-pet-status" class="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded text-white">
+                                    <option value="Happy">😊 Happy</option>
+                                    <option value="Sleepy">😴 Sleepy</option>
+                                    <option value="Excited">🤩 Excited</option>
+                                    <option value="Calm">😌 Calm</option>
+                                    <option value="Playful">🎮 Playful</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded transition duration-300">
+                            💾 Save Changes
+                        </button>
+                        <button type="button" onclick="closeEditModal()" class="bg-gray-600 hover:bg-gray-700 px-6 py-2 rounded transition duration-300">
+                            ❌ Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feeding Card Generator Modal -->
+    <div id="feeding-card-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-gray-800 rounded-lg p-6 max-w-lg w-full">
+                <h3 class="text-xl font-bold mb-4">⚡ DIGIMON X Power-up Update</h3>
+                
+                <div class="mb-4">
+                    <canvas id="feeding-canvas" width="800" height="600" style="max-width: 100%; border: 1px solid #666;"></canvas>
+                </div>
+                
+                <div class="flex gap-2">
+                    <button onclick="downloadFeedingCard()" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded transition duration-300">
+                        💾 Download Image
+                    </button>
+                    <button onclick="copyFeedingCard()" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded transition duration-300">
+                        📋 Copy to Clipboard
+                    </button>
+                    <button onclick="closeFeedingCard()" class="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded transition duration-300">
+                        ❌ Close
+                    </button>
+                </div>
+                
+                <div class="mt-4 p-3 bg-gray-700 rounded text-sm">
+                    <p class="text-green-400">⚡ Share your Digimon's power-up moments on social media!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Card Generator Modal -->
+    <div id="status-card-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-gray-800 rounded-lg p-6 max-w-lg w-full">
+                <h3 class="text-xl font-bold mb-4">📊 DIGIMON X Status</h3>
+                
+                <div class="mb-4">
+                    <canvas id="status-canvas" width="800" height="600" style="max-width: 100%; border: 1px solid #666;"></canvas>
+                </div>
+                
+                <div class="flex gap-2">
+                    <button onclick="downloadStatusCard()" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded transition duration-300">
+                        💾 Download Image
+                    </button>
+                    <button onclick="copyStatusCard()" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded transition duration-300">
+                        📋 Copy to Clipboard
+                    </button>
+                    <button onclick="closeStatusCard()" class="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded transition duration-300">
+                        ❌ Close
+                    </button>
+                </div>
+                
+                <div class="mt-4 p-3 bg-gray-700 rounded text-sm">
+                    <p class="text-cyan-400">📊 Share your Digimon's complete status with others!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentGeneratedPet = null;
+
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.add('bg-gray-700', 'hover:bg-gray-600');
+            });
+            
+            // Show selected tab and activate button
+            document.getElementById(tabName + '-content').classList.remove('hidden');
+            const activeBtn = document.getElementById(tabName + '-tab');
+            activeBtn.classList.add('active');
+            activeBtn.classList.remove('bg-gray-700', 'hover:bg-gray-600');
+        }
+
+        // Add pet form submission
+        document.getElementById('add-pet-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const petData = {
+                ascii: document.getElementById('pet-ascii').value,
+                name: document.getElementById('pet-name').value,
+                race: document.getElementById('pet-race').value,
+                owner: document.getElementById('pet-owner').value,
+                status: document.getElementById('pet-status').value
+            };
+            
+            if (!petData.ascii || !petData.name || !petData.race || !petData.owner) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/pets', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(petData)
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    alert('Pet added successfully!');
+                    location.reload();
+                } else {
+                    alert('Error: ' + result.error);
+                }
+            } catch (error) {
+                alert('Error adding pet: ' + error.message);
+            }
+        });
+
+        // Feed pet
+        async function feedPet(petId) {
+            try {
+                const response = await fetch(`/api/pets/${petId}/feed`, {
+                    method: 'POST'
+                });
+                
+                const result = await response.json();
+                console.log('Feed result:', result); // Debug log
+                
+                if (result.success) {
+                    // Generate feeding card
+                    console.log('Generating feeding card...'); // Debug log
+                    generateFeedingCard(result.pet, result.feedingMessage);
+                } else {
+                    // Generate cooldown card
+                    console.log('Generating cooldown card...'); // Debug log
+                    generateCooldownCard(result.pet, result.cooldownMinutes);
+                }
+            } catch (error) {
+                console.error('Feed error:', error); // Debug log
+                alert('Error feeding pet: ' + error.message);
+            }
+        }
+
+        // Delete pet
+        async function deletePet(petId) {
+            if (!confirm('Are you sure you want to delete this pet?')) return;
+            
+            try {
+                const response = await fetch(`/api/pets/${petId}`, {
+                    method: 'DELETE'
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    alert('Pet deleted successfully!');
+                    location.reload();
+                } else {
+                    alert('Error: ' + result.error);
+                }
+            } catch (error) {
+                alert('Error deleting pet: ' + error.message);
+            }
+        }
+
+        // Edit pet
+        async function editPet(petId) {
+            try {
+                const response = await fetch(`/api/pets/${petId}`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    const pet = result.pet;
+                    document.getElementById('edit-pet-id').value = pet.id;
+                    document.getElementById('edit-pet-ascii').value = pet.ascii;
+                    document.getElementById('edit-pet-name').value = pet.name;
+                    document.getElementById('edit-pet-race').value = pet.race;
+                    document.getElementById('edit-pet-owner').value = pet.owner;
+                    document.getElementById('edit-pet-status').value = pet.status;
+                    
+                    document.getElementById('edit-modal').classList.remove('hidden');
+                } else {
+                    alert('Error loading pet: ' + result.error);
+                }
+            } catch (error) {
+                alert('Error loading pet: ' + error.message);
+            }
+        }
+
+        // Use template
+        async function useTemplate(templateId) {
+            try {
+                const response = await fetch(`/api/templates/${templateId}`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    const template = result.template;
+                    document.getElementById('pet-ascii').value = template.ascii;
+                    document.getElementById('pet-name').value = template.name;
+                    document.getElementById('pet-race').value = template.race;
+                    
+                    // Switch to add pet tab
+                    showTab('add-pet');
+                    alert(`Template "${template.name}" loaded! Please add owner link and adjust as needed.`);
+                } else {
+                    alert('Error loading template: ' + result.error);
+                }
+            } catch (error) {
+                alert('Error loading template: ' + error.message);
+            }
+        }
+
+        // Catch Pokemon
+        async function captureDigimon() {
+            const ownerInput = document.getElementById('ai-owner');
+            if (!ownerInput.value) {
+                alert('Please enter a tamer X link');
+                return;
+            }
+            
+            const button = event.target;
+            button.disabled = true;
+            button.textContent = '⚡ Entering Digital World...';
+            
+            try {
+                const response = await fetch('/api/capture-digimon', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ownerLink: ownerInput.value })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success && result.type === 'catch_success') {
+                    // Success - Digimon captured!
+                    currentGeneratedPet = result.digimon;
+                    
+                    // Show Digimon GIF if available, otherwise fallback to ASCII
+                    if (result.digimon.gifPath) {
+                        document.getElementById('ai-gif-container').style.display = 'flex';
+                        document.getElementById('ai-gif').src = result.digimon.gifPath;
+                        document.getElementById('ai-ascii').style.display = 'none';
+                    } else {
+                        document.getElementById('ai-ascii').textContent = result.digimon.ascii || 'No preview available';
+                        document.getElementById('ai-ascii').style.display = 'block';
+                        document.getElementById('ai-gif-container').style.display = 'none';
+                    }
+                    
+                    document.getElementById('ai-name').textContent = result.digimon.name;
+                    document.getElementById('ai-race').textContent = result.digimon.element + ' - ' + result.digimon.level;
+                    document.getElementById('ai-owner-display').textContent = ownerInput.value;
+                    document.getElementById('ai-preview').classList.remove('hidden');
+                    
+                    // Generate success card
+                    generateCatchSuccessCard(result.digimon, ownerInput.value);
+                } else if (result.type === 'catch_failed') {
+                    // Failed to catch
+                    generateCatchFailureCard(ownerInput.value);
+                } else if (result.type === 'limit_reached') {
+                    // Pokemon limit reached - generate limit card
+                    generateMaxLimitCard(ownerInput.value);
+                } else {
+                    alert('Error: ' + result.error);
+                }
+            } catch (error) {
+                alert('Error capturing Digimon: ' + error.message);
+            } finally {
+                button.disabled = false;
+                button.textContent = '⚡ Enter Digital World!';
+            }
+        }
+
+        function acceptGenerated() {
+            if (!currentGeneratedPet) return;
+            
+            // Since the Digimon is already saved to the database, just generate the social card
+            if (confirm('🎉 Digimon captured and saved! Would you like to generate a social media card to share on X/Twitter?')) {
+                generateSocialCard();
+            } else {
+                hidePreview();
+                // Refresh the page to show the new Digimon in the collection
+                location.reload();
+            }
+        }
+
+        function hidePreview() {
+            document.getElementById('ai-preview').classList.add('hidden');
+            currentGeneratedPet = null;
+        }
+
+        // Generate Social Media Card
+        function generateSocialCard() {
+            if (!currentGeneratedPet) return;
+            
+            const canvas = document.getElementById('social-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Load background image
+            const bgImg = new Image();
+            bgImg.onload = function() {
+                // Draw background
+                ctx.drawImage(bgImg, 0, 0, 800, 600);
+                
+                // Add dark overlay for better text readability
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+                ctx.fillRect(0, 0, 800, 600);
+                
+                // Title
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 28px "Courier New", "Monaco", "Menlo", monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText('DIGIVICE CONNECTED!', 400, 80);
+                
+                // Load Pokemon image
+                loadSocialPokemonImage();
+            };
+            bgImg.src = '/card.png';
+            
+            function loadSocialPokemonImage() {
+            
+                // Load and draw Pokemon GIF (as static image)
+                if (currentGeneratedPet.gifPath) {
+                    const img = new Image();
+                    img.onload = function() {
+                        // Draw Pokemon image in center (no background)
+                        const imgSize = 150;
+                        const imgX = 400 - imgSize/2;
+                        const imgY = 120;
+                        
+                        ctx.drawImage(img, imgX, imgY, imgSize, imgSize);
+                        
+                        // Continue with text after image loads
+                        drawSocialCardText();
+                    };
+                    img.src = currentGeneratedPet.gifPath;
+                } else {
+                    // No image, just draw text
+                    drawSocialCardText();
+                }
+            }
+            
+            function drawSocialCardText() {
+                // Pokemon info display (moved down to make room for image)
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 20px "Courier New", "Monaco", "Menlo", monospace';
+                ctx.textAlign = 'center';
+                
+                const startY = 300;
+                ctx.fillText(currentGeneratedPet.name, 400, startY);
+                
+                ctx.fillStyle = '#00ffff';
+                ctx.font = '16px "Courier New", "Monaco", "Menlo", monospace';
+                ctx.fillText(`Type: ${currentGeneratedPet.element}`, 400, startY + 40);
+                
+                // Trainer info
+                const ownerHandle = document.getElementById('ai-owner').value.match(/(?:twitter\.com\/|x\.com\/)([^\/\?]+)/);
+                const username = ownerHandle ? `@${ownerHandle[1]}` : '@tamer';
+                
+                ctx.fillStyle = '#888888';
+                ctx.font = '14px "Courier New", "Monaco", "Menlo", monospace';
+                ctx.fillText(`Tamer: ${username}`, 400, startY + 80);
+            }
+            
+            // Show modal
+            document.getElementById('social-card-modal').classList.remove('hidden');
+        }
+        
+        function downloadSocialCard() {
+            const canvas = document.getElementById('social-canvas');
+            const link = document.createElement('a');
+            link.download = `poketto-${currentGeneratedPet.name.toLowerCase()}-caught.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+        
+        function copySocialCard() {
+            const canvas = document.getElementById('social-canvas');
+            canvas.toBlob(function(blob) {
+                const item = new ClipboardItem({ 'image/png': blob });
+                navigator.clipboard.write([item]).then(function() {
+                    alert('✅ Image copied to clipboard! You can now paste it on X/Twitter.');
+                }).catch(function(err) {
+                    console.error('Failed to copy image: ', err);
+                    alert('❌ Failed to copy image. Try downloading instead.');
+                });
+            });
+        }
+        
+        function closeSocialCard() {
+            document.getElementById('social-card-modal').classList.add('hidden');
+        }
+
+        // Generate Catch Success Card
+        function generateCatchSuccessCard(digimon, trainerLink) {
+            const canvas = document.getElementById('social-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Load background image
+            const bgImg = new Image();
+            bgImg.onload = function() {
+                // Draw background
+                ctx.drawImage(bgImg, 0, 0, 800, 600);
+                
+                // Add dark overlay for better text readability
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+                ctx.fillRect(0, 0, 800, 600);
+                
+                // Title
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 28px "Courier New", "Monaco", "Menlo", monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText('DIGIVICE SYNCHRONIZED!', 400, 80);
+                
+                // Success message
+                ctx.fillStyle = '#00ffff';
+                ctx.font = '16px "Courier New", "Monaco", "Menlo", monospace';
+                ctx.fillText('Congratulations, Tamer!', 400, 110);
+                
+                // Load Digimon GIF after background loads
+                loadDigimonImage();
+            };
+            bgImg.src = '/card.png';
+            
+            function loadDigimonImage() {
+            
+                // Load and draw Digimon GIF (as static image)
+                if (digimon.gifPath) {
+                    const img = new Image();
+                    img.onload = function() {
+                        // Draw Digimon image in center (no background)
+                        const imgSize = 150;
+                        const imgX = 400 - imgSize/2;
+                        const imgY = 140;
+                        
+                        ctx.drawImage(img, imgX, imgY, imgSize, imgSize);
+                        
+                        // Continue with text after image loads
+                        drawSuccessCardText();
+                    };
+                    img.src = digimon.gifPath;
+                } else {
+                    // No image, just draw text
+                    drawSuccessCardText();
+                }
+            }
+            
+            function drawSuccessCardText() {
+                // Digimon caught display
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 20px "Courier New", "Monaco", "Menlo", monospace';
+                ctx.textAlign = 'center';
+                
+                // Show caught Digimon info (moved down to make room for image)
+                const startY = 320;
+                ctx.fillText(`${digimon.name} partnered with you!`, 400, startY);
+                
+                ctx.fillStyle = '#00ffff';
+                ctx.font = '16px "Courier New", "Monaco", "Menlo", monospace';
+                ctx.fillText(`Type: ${digimon.element}`, 400, startY + 40);
+                
+                // Trainer info
+                const ownerHandle = trainerLink.match(/(?:twitter\.com\/|x\.com\/)([^\/\?]+)/);
+                const username = ownerHandle ? `@${ownerHandle[1]}` : '@tamer';
+                
+                ctx.fillStyle = '#888888';
+                ctx.font = '14px "Courier New", "Monaco", "Menlo", monospace';
+                ctx.fillText(`Tamer: ${username}`, 400, startY + 80);
+            }
+            
+            // Show modal
+            document.getElementById('social-card-modal').classList.remove('hidden');
+        }
+
+        // Generate Max Pokemon Limit Card
+        function generateMaxLimitCard(trainerLink) {
+            const canvas = document.getElementById('social-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Load background image
+            const bgImg = new Image();
+            bgImg.onload = function() {
+                // Draw background
+                ctx.drawImage(bgImg, 0, 0, 800, 600);
+                
+                // Add dark overlay for better text readability
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+                ctx.fillRect(0, 0, 800, 600);
+                
+                // Title
+                ctx.fillStyle = '#ffaa00';
+                ctx.font = 'bold 24px "Courier New", "Monaco", "Menlo", monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText('DIGIMON LIMIT REACHED!', 400, 80);
+                
+                drawLimitContent();
+            };
+            bgImg.src = '/card.png';
+            
+            function drawLimitContent() {
+            
+                // Warning message
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '16px "Courier New", "Monaco", "Menlo", monospace';
+                ctx.fillText('Maximum 3 Digimon per tamer', 400, 120);
+                
+                // Main message
+                ctx.fillStyle = '#00ffff';
+                ctx.font = 'bold 18px "Courier New", "Monaco", "Menlo", monospace';
+                ctx.fillText('Your team is complete!', 400, 280);
+                
+                // Instructions message
+                ctx.fillStyle = '#ffaa00';
+                ctx.font = '14px "Courier New", "Monaco", "Menlo", monospace';
+                ctx.fillText('Release a Digimon to capture new ones', 400, 320);
+                
+                // Trainer info
+                const ownerHandle = trainerLink.match(/(?:twitter\.com\/|x\.com\/)([^\/\?]+)/);
+                const username = ownerHandle ? `@${ownerHandle[1]}` : '@tamer';
+                
+                ctx.fillStyle = '#888888';
+                ctx.font = '14px "Courier New", "Monaco", "Menlo", monospace';
+                ctx.fillText(`Trainer: ${username}`, 400, 370);
+            }
+            
+            // Show modal
+            document.getElementById('social-card-modal').classList.remove('hidden');
+        }
+
+        // Generate Catch Failure Card
+        function generateCatchFailureCard(trainerLink) {
+            const canvas = document.getElementById('social-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Load background image
+            const bgImg = new Image();
+            bgImg.onload = function() {
+                // Draw background
+                ctx.drawImage(bgImg, 0, 0, 800, 600);
+                
+                // Add dark overlay for better text readability
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+                ctx.fillRect(0, 0, 800, 600);
+                
+                // Title
+                ctx.fillStyle = '#ff6666';
+                ctx.font = 'bold 26px "Courier New", "Monaco", "Menlo", monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText('CAPTURE FAILED!', 400, 80);
+                
+                drawFailureContent();
+            };
+            bgImg.src = '/card.png';
+            
+            function drawFailureContent() {
+            
+                // Failure message
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '16px "Courier New", "Monaco", "Menlo", monospace';
+                ctx.fillText('The Digimon escaped!', 400, 120);
+                
+                // Main message
+                ctx.fillStyle = '#00ffff';
+                ctx.font = 'bold 18px "Courier New", "Monaco", "Menlo", monospace';
+                ctx.fillText('Better luck next time, Tamer!', 400, 300);
+                
+                // Trainer info
+                const ownerHandle = trainerLink.match(/(?:twitter\.com\/|x\.com\/)([^\/\?]+)/);
+                const username = ownerHandle ? `@${ownerHandle[1]}` : '@tamer';
+                
+                ctx.fillStyle = '#888888';
+                ctx.font = '14px "Courier New", "Monaco", "Menlo", monospace';
+                ctx.fillText(`Trainer: ${username}`, 400, 350);
+            }
+            
+            // Show modal
+            document.getElementById('social-card-modal').classList.remove('hidden');
+        }
+        
+        // Generate Feeding Card
+        function generateFeedingCard(pet, feedingMessage) {
+            console.log('generateFeedingCard called with:', pet, feedingMessage); // Debug log
+            const canvas = document.getElementById('feeding-canvas');
+            const ctx = canvas.getContext('2d');
+            console.log('Canvas found:', canvas); // Debug log
+            
+            // Clear canvas
+            ctx.fillStyle = '#15161B';
+            ctx.fillRect(0, 0, 800, 600);
+            
+            // Draw terminal-style border
+            ctx.strokeStyle = '#00ff00';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(20, 20, 760, 560);
+            
+            // Draw inner border
+            ctx.strokeStyle = '#333333';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(40, 40, 720, 520);
+            
+            // Set font for monospace text
+            ctx.font = '28px "JetBrains Mono", "Courier New", monospace';
+            ctx.textAlign = 'center';
+            
+            // Title
+            ctx.fillStyle = '#00ff00';
+            ctx.font = 'bold 30px "JetBrains Mono", monospace';
+            ctx.fillText('DIGIMON X Feeding Time!', 400, 90);
+            
+            // Terminal prompt style
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '16px "JetBrains Mono", monospace';
+            ctx.textAlign = 'left';
+            ctx.fillText('$ digimon-x --feed-digimon --id=' + pet.id, 60, 120);
+            
+            // Pokemon info display (no ASCII)
+            ctx.fillStyle = '#00ffff';
+            ctx.font = '24px "JetBrains Mono", monospace';
+            ctx.textAlign = 'center';
+            
+            const startY = 160;
+            ctx.fillText(`🔋 ${pet.name} Power-up Time! 🔋`, 400, startY);
+            
+            ctx.fillStyle = '#ffff00';
+            ctx.font = '20px "JetBrains Mono", monospace';
+            ctx.fillText(`Type: ${pet.race}`, 400, startY + 40);
+            
+            // Pet Name
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 26px "JetBrains Mono", monospace';
+            const petInfoY = startY + 80;
+            ctx.fillText(pet.name, 400, petInfoY);
+            
+            // Feeding Message (word wrap)
+            ctx.fillStyle = '#ffff00';
+            ctx.font = '16px "JetBrains Mono", monospace';
+            ctx.textAlign = 'center';
+            
+            const words = feedingMessage.split(' ');
+            let line = '';
+            let y = petInfoY + 50;
+            
+            for (let n = 0; n < words.length; n++) {
+                const testLine = line + words[n] + ' ';
+                const metrics = ctx.measureText(testLine);
+                const testWidth = metrics.width;
+                
+                if (testWidth > 680 && n > 0) {
+                    ctx.fillText(line, 400, y);
+                    line = words[n] + ' ';
+                    y += 25;
+                } else {
+                    line = testLine;
+                }
+            }
+            ctx.fillText(line, 400, y);
+            
+            // Status line
+            ctx.fillStyle = '#00ff00';
+            ctx.font = '14px "JetBrains Mono", monospace';
+            ctx.textAlign = 'left';
+            ctx.fillText('Status: [POWERED] - Digimon successfully powered up! Power count: ' + pet.feed_count + ' | Level: ' + pet.growth_stage, 60, 520);
+            
+            // Bottom branding
+            ctx.fillStyle = '#333333';
+            ctx.font = '12px "JetBrains Mono", monospace';
+            ctx.textAlign = 'right';
+            ctx.fillText('DIGIMON-X.system v2.0', 740, 550);
+            
+            // Show modal
+            console.log('Showing feeding card modal...'); // Debug log
+            const modal = document.getElementById('feeding-card-modal');
+            console.log('Modal element:', modal); // Debug log
+            modal.classList.remove('hidden');
+            modal.style.display = 'flex'; // Force display
+            modal.style.zIndex = '9999'; // Force z-index
+            console.log('Modal classes after show:', modal.className); // Debug log
+            console.log('Modal style after show:', modal.style.cssText); // Debug log
+        }
+        
+        // Generate Cooldown Card
+        function generateCooldownCard(pet, cooldownMinutes) {
+            const canvas = document.getElementById('feeding-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Clear canvas - same setup as feeding card
+            ctx.fillStyle = '#15161B';
+            ctx.fillRect(0, 0, 800, 600);
+            
+            // Draw terminal-style borders
+            ctx.strokeStyle = '#ff6666';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(20, 20, 760, 560);
+            
+            ctx.strokeStyle = '#333333';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(40, 40, 720, 520);
+            
+            // Title
+            ctx.fillStyle = '#ff6666';
+            ctx.font = 'bold 30px "JetBrains Mono", monospace';
+            ctx.textAlign = 'center';
+            ctx.fillText('DIGIMON X - Already Powered!', 400, 90);
+            
+            // Terminal prompt
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '16px "JetBrains Mono", monospace';
+            ctx.textAlign = 'left';
+            ctx.fillText('$ digimon-x --feed-digimon --id=' + pet.id, 60, 120);
+            
+            // Pokemon info display (no ASCII)
+            ctx.fillStyle = '#888888';
+            ctx.font = '24px "JetBrains Mono", monospace';
+            ctx.textAlign = 'center';
+            
+            const startY = 160;
+            ctx.fillText(`⚡ ${pet.name} is Fully Charged! ⚡`, 400, startY);
+            
+            ctx.fillStyle = '#ffff00';
+            ctx.font = '20px "JetBrains Mono", monospace';
+            ctx.fillText(`Type: ${pet.race}`, 400, startY + 40);
+            
+            // Pet Name
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 26px "JetBrains Mono", monospace';
+            const petInfoY = startY + 80;
+            ctx.fillText(pet.name, 400, petInfoY);
+            
+            // Cooldown Message
+            ctx.fillStyle = '#ffff00';
+            ctx.font = '20px "JetBrains Mono", monospace';
+            ctx.fillText('"My power is at maximum! ⚡"', 400, petInfoY + 50);
+            
+            ctx.fillStyle = '#ff6666';
+            ctx.font = '18px "JetBrains Mono", monospace';
+            ctx.fillText('Please come back in ' + cooldownMinutes + ' minutes', 400, petInfoY + 85);
+            
+            // Status line
+            ctx.fillStyle = '#ff6666';
+            ctx.font = '14px "JetBrains Mono", monospace';
+            ctx.textAlign = 'left';
+            ctx.fillText('Status: [COOLDOWN] - Digimon power recharging | Next power-up in: ' + cooldownMinutes + 'min', 60, 520);
+            
+            // Bottom branding
+            ctx.fillStyle = '#333333';
+            ctx.font = '12px "JetBrains Mono", monospace';
+            ctx.textAlign = 'right';
+            ctx.fillText('DIGIMON-X.system v2.0', 740, 550);
+            
+            // Show modal
+            console.log('Showing feeding card modal...'); // Debug log
+            const modal = document.getElementById('feeding-card-modal');
+            console.log('Modal element:', modal); // Debug log
+            modal.classList.remove('hidden');
+            modal.style.display = 'flex'; // Force display
+            modal.style.zIndex = '9999'; // Force z-index
+            console.log('Modal classes after show:', modal.className); // Debug log
+            console.log('Modal style after show:', modal.style.cssText); // Debug log
+        }
+        
+        function downloadFeedingCard() {
+            const canvas = document.getElementById('feeding-canvas');
+            const link = document.createElement('a');
+            const timestamp = new Date().toISOString().slice(0, 16).replace(/[:T]/g, '-');
+            link.download = `poketto-feeding-${timestamp}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+        
+        function copyFeedingCard() {
+            const canvas = document.getElementById('feeding-canvas');
+            canvas.toBlob(function(blob) {
+                const item = new ClipboardItem({ 'image/png': blob });
+                navigator.clipboard.write([item]).then(function() {
+                    alert('✅ Power-up card copied to clipboard!');
+                }).catch(function(err) {
+                    console.error('Failed to copy image: ', err);
+                    alert('❌ Failed to copy image. Try downloading instead.');
+                });
+            });
+        }
+        
+        function closeFeedingCard() {
+            const modal = document.getElementById('feeding-card-modal');
+            modal.classList.add('hidden');
+            modal.style.display = ''; // Reset display
+            modal.style.zIndex = ''; // Reset z-index
+        }
+
+        // Generate Status Card
+        async function generateStatusCard(petId) {
+            try {
+                const response = await fetch(`/api/pets/${petId}`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    const pet = result.pet;
+                    createStatusCard(pet);
+                } else {
+                    alert('Error loading pet: ' + result.error);
+                }
+            } catch (error) {
+                alert('Error loading pet: ' + error.message);
+            }
+        }
+
+        function createStatusCard(pet) {
+            const canvas = document.getElementById('status-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Load background image
+            const bgImg = new Image();
+            bgImg.onload = function() {
+                // Draw background
+                ctx.drawImage(bgImg, 0, 0, 800, 600);
+                
+                // Add dark overlay for better text readability
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+                ctx.fillRect(0, 0, 800, 600);
+                
+                // Title
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 22px "Courier New", "Monaco", "Menlo", monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText('Digimon Status', 400, 60);
+                
+                loadStatusPokemonImage();
+            };
+            bgImg.src = '/card.png';
+            
+            function loadStatusPokemonImage() {
+            
+                // Load and draw Pokemon GIF (as static image) if available
+                if (pet.ascii && pet.ascii.startsWith('/digimon/')) {
+                    const img = new Image();
+                    img.onload = function() {
+                        // Draw Pokemon image in center (no background)
+                        const imgSize = 120;
+                        const imgX = 400 - imgSize/2;
+                        const imgY = 100;
+                        
+                        ctx.drawImage(img, imgX, imgY, imgSize, imgSize);
+                        
+                        // Continue with text after image loads
+                        drawStatusCardText();
+                    };
+                    img.src = pet.ascii;
+                } else {
+                    // No image, just draw text
+                    drawStatusCardText();
+                }
+            }
+            
+            function drawStatusCardText() {
+                // Pokemon info display (moved down to make room for image)
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 20px "Courier New", "Monaco", "Menlo", monospace';
+                ctx.textAlign = 'center';
+                
+                const startY = pet.ascii && pet.ascii.startsWith('/digimon/') ? 240 : 100;
+                ctx.fillText(pet.name, 400, startY);
+                
+                ctx.fillStyle = '#00ffff';
+                ctx.font = '16px "Courier New", "Monaco", "Menlo", monospace';
+                ctx.fillText(`Type: ${pet.race}`, 400, startY + 30);
+            
+                // Status Information
+                ctx.textAlign = 'center';
+                ctx.fillStyle = '#888888';
+                ctx.font = '14px "Courier New", "Monaco", "Menlo", monospace';
+                
+                const statusY = startY + 80;
+                ctx.fillText(`Growth: ${pet.growth_stage}`, 400, statusY);
+                ctx.fillText(`Fed: ${pet.feed_count} times`, 400, statusY + 25);
+                
+                // Owner info
+                const ownerHandle = pet.ownerHandle || 'Unknown Tamer';
+                ctx.fillText(`Trainer: ${ownerHandle}`, 400, statusY + 50);
+            }
+            
+            // Show modal
+            document.getElementById('status-card-modal').classList.remove('hidden');
+        }
+        
+        function downloadStatusCard() {
+            const canvas = document.getElementById('status-canvas');
+            const link = document.createElement('a');
+            const timestamp = new Date().toISOString().slice(0, 16).replace(/[:T]/g, '-');
+            link.download = `digimon-x-status-${timestamp}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+        
+        function copyStatusCard() {
+            const canvas = document.getElementById('status-canvas');
+            canvas.toBlob(function(blob) {
+                const item = new ClipboardItem({ 'image/png': blob });
+                navigator.clipboard.write([item]).then(function() {
+                    alert('✅ Status card copied to clipboard!');
+                }).catch(function(err) {
+                    console.error('Failed to copy image: ', err);
+                    alert('❌ Failed to copy image. Try downloading instead.');
+                });
+            });
+        }
+        
+        function closeStatusCard() {
+            document.getElementById('status-card-modal').classList.add('hidden');
+        }
+
+        // Edit pet form submission
+        document.getElementById('edit-pet-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const petId = document.getElementById('edit-pet-id').value;
+            const petData = {
+                ascii: document.getElementById('edit-pet-ascii').value,
+                name: document.getElementById('edit-pet-name').value,
+                race: document.getElementById('edit-pet-race').value,
+                owner: document.getElementById('edit-pet-owner').value,
+                status: document.getElementById('edit-pet-status').value
+            };
+            
+            if (!petData.ascii || !petData.name || !petData.race || !petData.owner) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/pets/${petId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(petData)
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    alert('Pet updated successfully!');
+                    closeEditModal();
+                    location.reload();
+                } else {
+                    alert('Error: ' + result.error);
+                }
+            } catch (error) {
+                alert('Error updating pet: ' + error.message);
+            }
+        });
+
+        function closeEditModal() {
+            document.getElementById('edit-modal').classList.add('hidden');
+        }
+
+        // ── X Agent Functions ──
+        async function refreshAgentStatus() {
+            try {
+                const res = await fetch('/api/admin/agent/status');
+                const data = await res.json();
+                const badge = document.getElementById('agent-status-badge');
+                if (data.active) {
+                    badge.textContent = 'ONLINE';
+                    badge.style.background = '#48A058';
+                } else {
+                    badge.textContent = 'OFFLINE';
+                    badge.style.background = '#B3181C';
+                }
+                document.getElementById('agent-bot-name').textContent = data.botUsername || 'digimononx';
+                document.getElementById('agent-replies-today').textContent = data.stats?.repliesToday || 0;
+                document.getElementById('agent-replies-total').textContent = data.stats?.repliesTotal || 0;
+                document.getElementById('agent-last-checked').textContent = data.stats?.lastChecked ? new Date(data.stats.lastChecked).toLocaleString() : 'never';
+                document.getElementById('agent-last-error').textContent = data.stats?.lastError || 'none';
+            } catch (e) {
+                console.error('Status error:', e);
+            }
+        }
+
+        async function startAgent() {
+            try {
+                const res = await fetch('/api/admin/agent/start', { method: 'POST' });
+                const data = await res.json();
+                alert(data.message || data.error || 'Agent started');
+                refreshAgentStatus();
+            } catch (e) { alert('Error: ' + e.message); }
+        }
+
+        async function stopAgent() {
+            try {
+                const res = await fetch('/api/admin/agent/stop', { method: 'POST' });
+                const data = await res.json();
+                alert(data.message || data.error || 'Agent stopped');
+                refreshAgentStatus();
+            } catch (e) { alert('Error: ' + e.message); }
+        }
+
+        async function clearReplies() {
+            if (!confirm('Clear all reply logs?')) return;
+            try {
+                await fetch('/api/admin/agent/clear-replies', { method: 'POST' });
+                loadRecentReplies();
+            } catch (e) { alert('Error: ' + e.message); }
+        }
+
+        async function clearFailed() {
+            try {
+                const res = await fetch('/api/admin/agent/clear-failed', { method: 'POST' });
+                const data = await res.json();
+                alert('Cleared ' + (data.cleared || 0) + ' failed replies');
+            } catch (e) { alert('Error: ' + e.message); }
+        }
+
+        async function backfillAvatars() {
+            try {
+                const res = await fetch('/api/admin/agent/backfill-avatars', { method: 'POST' });
+                const data = await res.json();
+                alert(data.message || 'Done');
+            } catch (e) { alert('Error: ' + e.message); }
+        }
+
+        async function testAgentReply() {
+            const username = document.getElementById('test-username').value.replace('@', '') || 'testuser';
+            const message = document.getElementById('test-message').value;
+            if (!message) { alert('Enter a message to test'); return; }
+
+            const resultDiv = document.getElementById('test-result');
+            resultDiv.style.display = 'block';
+            document.getElementById('test-result-text').textContent = 'Processing...';
+            document.getElementById('test-result-command').textContent = '...';
+            document.getElementById('test-result-image-container').style.display = 'none';
+
+            try {
+                const res = await fetch('/api/admin/agent/test', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, message })
+                });
+                const data = await res.json();
+
+                if (data.ok) {
+                    document.getElementById('test-result-command').textContent = data.command || 'unknown';
+                    document.getElementById('test-result-text').textContent = data.text || '(no text)';
+                    if (data.image) {
+                        document.getElementById('test-result-image').src = data.image;
+                        document.getElementById('test-result-image-container').style.display = 'block';
+                    }
+                } else {
+                    document.getElementById('test-result-text').textContent = 'ERROR: ' + (data.error || 'Unknown error');
+                }
+            } catch (e) {
+                document.getElementById('test-result-text').textContent = 'ERROR: ' + e.message;
+            }
+        }
+
+        function quickTest(msg) {
+            document.getElementById('test-message').value = msg;
+            testAgentReply();
+        }
+
+        async function loadRecentReplies() {
+            try {
+                const res = await fetch('/api/admin/agent/replies?limit=30');
+                const data = await res.json();
+                const container = document.getElementById('replies-log');
+
+                if (!data.replies || data.replies.length === 0) {
+                    container.innerHTML = '<div style="color:#888;">No replies yet</div>';
+                    return;
+                }
+
+                container.innerHTML = data.replies.map(r => {
+                    const time = r.created_at ? new Date(r.created_at).toLocaleString() : '?';
+                    const status = r.status === 'replied' ? '<span style="color:#48A058;">OK</span>' : '<span style="color:#B3181C;">' + (r.status || 'pending') + '</span>';
+                    return '<div style="border-bottom:1px solid #222; padding:6px 0;">' +
+                        '<div style="color:#F0B088;">@' + (r.author_username || '?') + ' ' + status + ' <span style="color:#555;">' + time + '</span></div>' +
+                        '<div style="color:#888; margin:2px 0;">' + (r.tweet_text || '').substring(0, 100) + '</div>' +
+                        '<div style="color:#48A058;">' + (r.our_reply || '').substring(0, 150) + '</div>' +
+                    '</div>';
+                }).join('');
+            } catch (e) {
+                document.getElementById('replies-log').innerHTML = '<div style="color:#B3181C;">Error loading replies</div>';
+            }
+        }
+
+        // Auto-load agent status when X Agent tab is shown
+        const origShowTab = showTab;
+        showTab = function(tabName) {
+            origShowTab(tabName);
+            if (tabName === 'x-agent') {
+                refreshAgentStatus();
+                loadRecentReplies();
+            }
+        };
+    </script>
+</body>
+</html>

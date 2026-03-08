@@ -1,0 +1,482 @@
+/* Digivice Digital Theme CSS */
+/* Inspired by the D-3 and D-Terminal Digivices */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono:wght@400&display=swap');
+
+@font-face {
+  font-family: 'Pixel Digivolve';
+  src: url('/fonts/Pixel Digivolve.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Pixel Digivolve';
+  src: url('/fonts/Pixel Digivolve Italic.otf') format('opentype');
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'PixelMplus12';
+  src: url('/fonts/PixelMplus12-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+:root {
+  /* Digivice Color Palette */
+  --digivice-blue: #001122;
+  --digivice-cyan: #00CCFF;
+  --digivice-orange: #FF6600;
+  --digivice-green: #00FF88;
+  --digivice-red: #FF3366;
+  --digivice-yellow: #FFCC00;
+  --digivice-purple: #8833FF;
+  --digivice-white: #FFFFFF;
+  --digivice-gray: #334455;
+  --digivice-dark: #000011;
+  
+  /* Backgrounds */
+  --bg-primary: linear-gradient(135deg, #001122 0%, #002244 50%, #001133 100%);
+  --bg-secondary: linear-gradient(45deg, #003366 0%, #004488 100%);
+  --bg-card: rgba(0, 204, 255, 0.1);
+  --bg-terminal: #000011;
+  
+  /* Borders */
+  --border-cyan: 2px solid #00CCFF;
+  --border-orange: 2px solid #FF6600;
+  /* Removed glitch border */
+  
+  /* Shadows */
+  --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-heavy: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--digivice-cyan);
+  font-family: 'Share Tech Mono', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+  padding: 1rem;
+  image-rendering: pixelated;
+  font-smooth: never;
+  -webkit-font-smoothing: none;
+  overflow-x: auto;
+}
+
+/* Digivice Container */
+.digivice-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Digivice Screen Effects */
+.digivice-screen {
+  background: var(--bg-terminal);
+  border: 1px solid var(--digivice-cyan);
+  border-radius: 8px;
+  padding: 20px;
+  margin: 15px 0;
+  box-shadow: var(--shadow-light);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Removed scan line effect */
+
+/* Navigation Bar */
+.digivice-nav {
+  background: var(--bg-secondary);
+  border: 1px solid var(--digivice-orange);
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-medium);
+}
+
+.nav-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.digivice-logo {
+  font-family: 'Orbitron', monospace;
+  font-weight: 900;
+  font-size: 24px;
+  color: var(--digivice-orange);
+  letter-spacing: 3px;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.digivice-btn {
+  background: linear-gradient(145deg, #003366, #001122);
+  color: var(--digivice-cyan);
+  border: 1px solid var(--digivice-cyan);
+  border-radius: 6px;
+  padding: 10px 18px;
+  text-decoration: none;
+  font-family: 'Orbitron', monospace;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 1px;
+  transition: background-color 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.digivice-btn:hover {
+  background: linear-gradient(145deg, #004488, #002244);
+}
+
+.digivice-btn:active {
+  background: linear-gradient(145deg, #002244, #001111);
+}
+
+.digivice-btn.primary {
+  background: linear-gradient(145deg, #FF6600, #CC4400);
+  color: var(--digivice-white);
+  border: 1px solid var(--digivice-orange);
+}
+
+.digivice-btn.primary:hover {
+  background: linear-gradient(145deg, #FF7722, #DD5500);
+}
+
+/* Header Section */
+.digivice-header {
+  text-align: center;
+  padding: 30px 0;
+  margin-bottom: 30px;
+}
+
+.terminal-prompt {
+  font-family: 'Share Tech Mono', monospace;
+  color: var(--digivice-green);
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.terminal-prompt::before {
+  content: '> ';
+  color: var(--digivice-orange);
+}
+
+.system-title {
+  font-family: 'Orbitron', monospace;
+  font-weight: 900;
+  font-size: 28px;
+  color: var(--digivice-cyan);
+  margin-bottom: 15px;
+  letter-spacing: 2px;
+}
+
+.system-subtitle {
+  color: var(--digivice-yellow);
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Digimon Cards */
+.digimon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 25px;
+  margin: 30px 0;
+}
+
+.digimon-card {
+  background: var(--bg-card);
+  border: 1px solid var(--digivice-cyan);
+  border-radius: 12px;
+  padding: 20px;
+  /* backdrop-filter: blur(10px); */ /* Disabled for cleaner look */
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.digimon-card:hover {
+  border-color: var(--digivice-orange);
+}
+
+/* Removed corner accent decoration */
+
+/* Digimon Display */
+.digimon-display {
+  height: 160px;
+  background: var(--bg-terminal);
+  border: 1px solid var(--digivice-orange);
+  border-radius: 8px;
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Removed display scan lines */
+
+.digimon-sprite {
+  max-width: 100%;
+  max-height: 140px;
+  object-fit: contain;
+}
+
+.digimon-ascii {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  line-height: 1.1;
+  color: var(--digivice-green);
+  white-space: pre;
+  text-align: center;
+}
+
+/* Removed digital pulse animation */
+
+/* Digimon Info */
+.digimon-info {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  line-height: 2;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px 0;
+  padding: 3px 0;
+  border-bottom: 1px solid rgba(0, 204, 255, 0.2);
+}
+
+.info-label {
+  color: var(--digivice-cyan);
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.info-value {
+  color: var(--digivice-white);
+}
+
+.digimon-name {
+  color: var(--digivice-orange);
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.digimon-type {
+  color: var(--digivice-yellow);
+  font-weight: bold;
+}
+
+.status-healthy { color: var(--digivice-green); }
+.status-warning { color: var(--digivice-yellow); }
+.status-critical { color: var(--digivice-red); }
+
+/* Tamer Groups */
+.tamer-group {
+  margin-bottom: 40px;
+}
+
+.tamer-header {
+  background: var(--bg-secondary);
+  border: 1px solid var(--digivice-orange);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  box-shadow: var(--shadow-light);
+}
+
+.tamer-avatar {
+  width: 50px;
+  height: 50px;
+  border: 1px solid var(--digivice-cyan);
+  border-radius: 50%;
+  background: var(--bg-terminal);
+  object-fit: cover;
+  box-shadow: var(--shadow-light);
+}
+
+.tamer-details h3 {
+  font-family: 'Orbitron', monospace;
+  font-weight: 700;
+  color: var(--digivice-orange);
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.tamer-details a {
+  color: var(--digivice-cyan);
+  text-decoration: none;
+}
+
+.tamer-details a:hover {
+  opacity: 0.8;
+}
+
+.tamer-stats {
+  color: var(--digivice-yellow);
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+/* Search Interface */
+.search-interface {
+  background: var(--bg-card);
+  border: 1px solid var(--digivice-cyan);
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px 0;
+  /* backdrop-filter: blur(5px); */ /* Disabled for cleaner look */
+}
+
+.search-input {
+  width: 100%;
+  max-width: 400px;
+  background: var(--bg-terminal);
+  border: 1px solid var(--digivice-orange);
+  border-radius: 6px;
+  padding: 12px 15px;
+  color: var(--digivice-cyan);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.search-input:focus {
+  border-color: var(--digivice-cyan);
+}
+
+.search-input::placeholder {
+  color: var(--digivice-gray);
+}
+
+.search-stats {
+  margin-top: 15px;
+  color: var(--digivice-yellow);
+  font-size: 12px;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--digivice-gray);
+}
+
+.empty-state .terminal-prompt {
+  color: var(--digivice-red);
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.warning-text {
+  color: var(--digivice-red);
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.help-text {
+  color: var(--digivice-green);
+  margin-bottom: 20px;
+}
+
+.command-list {
+  color: var(--digivice-cyan);
+  font-family: 'Share Tech Mono', monospace;
+  text-align: left;
+  display: inline-block;
+  margin: 20px 0;
+}
+
+.cursor {
+  color: var(--digivice-orange);
+  opacity: 0.8;
+}
+
+/* Footer */
+.system-footer {
+  text-align: center;
+  margin-top: 40px;
+  padding: 20px;
+  border-top: 1px solid var(--digivice-gray);
+  color: var(--digivice-gray);
+  font-size: 11px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .digimon-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .nav-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .digivice-logo {
+    font-size: 20px;
+  }
+  
+  .system-title {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 0.5rem;
+    font-size: 12px;
+  }
+  
+  .digivice-screen {
+    padding: 15px;
+  }
+  
+  .digimon-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+}
+
+/* Clean hover effects only */
+.interactive-element {
+  transition: opacity 0.2s ease;
+}
+
+.interactive-element:hover {
+  opacity: 0.8;
+}
+
+/* Simplified loading state */
+.loading {
+  opacity: 0.6;
+}
+
+/* Removed digital rain effect */

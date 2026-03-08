@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digimon X Documentation - Digital Monster Collection Guide</title>
+    <link rel="icon" type="image/png" href="/fav.png">
+    <!-- Digivice Theme CSS -->
+    <link rel="stylesheet" href="/digivice-theme.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: var(--bg-primary);
+            color: var(--digivice-cyan);
+            font-family: 'Share Tech Mono', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 1rem;
+            image-rendering: pixelated;
+            font-smooth: never;
+            -webkit-font-smoothing: none;
+            overflow-x: auto;
+        }
+        
+        .terminal-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .nav-terminal {
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .nav-link {
+            color: var(--digivice-white);
+            text-decoration: none;
+            padding: 8px 15px;
+            background: var(--digivice-orange);
+            text-transform: uppercase;
+            font-family: 'Orbitron', monospace;
+            border: none;
+            margin: 0 5px;
+            display: inline-block;
+            box-shadow: -2px -2px 0 #2a5930 inset, 2px 2px 0 #6ac77a inset;
+        }
+        
+        .nav-link:hover {
+            background: #6ac77a;
+            transform: scale(1.05);
+        }
+        
+        .terminal-title {
+            color: var(--digivice-cyan);
+            font-size: 14px;
+            text-transform: uppercase;
+            font-family: 'Orbitron', monospace;
+        }
+        
+        .prompt::before {
+            content: '$ ';
+            color: #ffffff;
+        }
+        
+        .doc-header {
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .doc-section {
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+        
+        .section-title {
+            color: var(--digivice-orange);
+            font-size: 16px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--digivice-orange);
+            padding-bottom: 10px;
+            font-family: 'Orbitron', monospace;
+        }
+        
+        .command {
+            background: var(--bg-card);
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid var(--digivice-cyan);
+            border-radius: 8px;
+            font-family: 'Share Tech Mono', monospace;
+            text-transform: uppercase;
+        }
+        
+        .command-name {
+            color: var(--digivice-orange);
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .warning {
+            background: var(--bg-card);
+            border: 1px solid var(--digivice-red);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            color: var(--digivice-red);
+            text-transform: uppercase;
+        }
+        
+        .info {
+            background: var(--bg-card);
+            border: 1px solid var(--digivice-green);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            color: var(--digivice-green);
+            text-transform: uppercase;
+        }
+        
+        .success {
+            background: var(--bg-card);
+            border: 1px solid var(--digivice-green);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            color: var(--digivice-green);
+            text-transform: uppercase;
+        }
+        
+        .code-block {
+            background: var(--bg-terminal);
+            border: 1px solid var(--digivice-cyan);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            overflow-x: auto;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 12px;
+            color: var(--digivice-cyan);
+        }
+        
+        .toc {
+            background: var(--bg-card);
+            border: 1px solid var(--digivice-orange);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding-left: 20px;
+        }
+        
+        .toc a {
+            color: var(--digivice-cyan);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+        
+        .toc a:hover {
+            color: var(--digivice-orange);
+        }
+        
+        .ascii-art {
+            color: var(--digivice-green);
+            text-align: center;
+            font-size: 12px;
+            line-height: 1.4;
+            margin: 20px 0;
+            font-family: 'Share Tech Mono', monospace;
+        }
+        
+        .highlight {
+            color: var(--digivice-red);
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .x-handle {
+            color: var(--digivice-orange);
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+        
+        .x-handle:hover {
+            color: var(--digivice-yellow);
+        }
+    </style>
+</head>
+<body>
+    <div class="digivice-container">
+        <!-- Digivice Navigation -->
+        <div class="digivice-nav">
+            <div class="nav-content">
+                <div class="digivice-logo">DIGIMON X</div>
+                <div class="nav-buttons">
+                    <a href="/" class="digivice-btn primary">SCANNER</a>
+                    <a href="https://x.com/digimononx" target="_blank" class="digivice-btn">X</a>
+                    <a href="javascript:location.reload()" class="digivice-btn">SYNC</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Database Header -->
+        <div class="digivice-screen digivice-header">
+            <div class="terminal-prompt">digimon-x --access-database</div>
+            <div class="system-title">TAMER DATABASE</div>
+            <div class="system-subtitle">Digital World Operations Manual v2.0</div>
+            <pre class="ascii-art" style="color: var(--digivice-cyan); font-size: 12px;">
+██████╗ ██╗ ██████╗ ██╗███╗   ███╗ ██████╗ ███╗   ██╗    ██╗  ██╗
+██╔══██╗██║██╔════╝ ██║████╗ ████║██╔═══██╗████╗  ██║    ╚██╗██╔╝
+██║  ██║██║██║  ███╗██║██╔████╔██║██║   ██║██╔██╗ ██║     ╚███╔╝ 
+██║  ██║██║██║   ██║██║██║╚██╔╝██║██║   ██║██║╚██╗██║     ██╔██╗ 
+██████╔╝██║╚██████╔╝██║██║ ╚═╝ ██║╚██████╔╝██║ ╚████║    ██╔╝ ██╗
+╚═════╝ ╚═╝ ╚═════╝ ╚═╝╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═══╝    ╚═╝  ╚═╝
+            </pre>
+            <div style="color: var(--digivice-green); margin-top: 15px; text-transform: uppercase; font-size: 12px;">
+                OFFICIAL TAMER DATABASE v2.0 | DIGITAL MONSTERS ARE THE CHAMPIONS!
+            </div>
+        </div>
+
+        <!-- Table of Contents -->
+        <div class="toc framed no-hd">
+            <div class="section-title">Table of Contents</div>
+            <ul>
+                <li><a href="#quick-start">1. Quick Start Guide</a></li>
+                <li><a href="#catching">2. Digimon Capture System</a></li>
+                <li><a href="#commands">3. Command Reference</a></li>
+                <li><a href="#ai-system">4. AI Digimon Generation</a></li>
+                <li><a href="#digimon-care">5. Digimon Care & Training</a></li>
+                <li><a href="#growth-system">6. Evolution System</a></li>
+                <li><a href="#social-features">7. Trainer Community</a></li>
+                <li><a href="#technical">8. Technical Specifications</a></li>
+                <li><a href="#api">9. API Documentation</a></li>
+                <li><a href="#troubleshooting">10. Troubleshooting</a></li>
+                <li><a href="#community">11. Trainer Guidelines</a></li>
+                <li><a href="#changelog">12. Version History</a></li>
+            </ul>
+        </div>
+
+        <!-- Quick Start -->
+        <div class="doc-section framed neutral" id="quick-start">
+            <div class="section-title">1. Quick Start Guide</div>
+            <p>Welcome to Digimon X, the ultimate Digital Monster collection and farming simulator powered by AI!</p>
+            
+            <div class="info">
+                <strong>First Time Trainer?</strong><br>
+                Follow these 3 simple steps to become a Digimon Tamer!
+            </div>
+
+            <div class="command">
+                <div class="command-name">Step 1: Social Verification</div>
+                Visit our official X: <a href="https://x.com/digimononx" class="x-handle">@digimononx</a><br>
+                Mention us to verify your Trainer account.
+            </div>
+
+            <div class="command">
+                <div class="command-name">Step 2: Capture Your First Digimon</div>
+                Use the <span class="highlight">/tamer</span> command to capture your first Digimon.<br>
+                Each tamer can have up to <span class="highlight">THREE</span> Digimon in their party.
+            </div>
+
+            <div class="command">
+                <div class="command-name">Step 3: Train and Battle</div>
+                Check your Digimon with <span class="highlight">/digivice</span><br>
+                Farm with other tamers using <span class="highlight">/farm</span>!
+            </div>
+        </div>
+
+        <!-- Digimon Capture -->
+        <div class="doc-section framed neutral" id="catching">
+            <div class="section-title">2. Digimon Capture System</div>
+            
+            <p>Become a Digimon Tamer by capturing and training up to 3 Digimon!</p>
+
+            <div class="warning">
+                <strong>Digimon Limits</strong><br>
+                • Maximum 3 Digimon per tamer<br>
+                • Each capture attempt uses AI generation<br>
+                • Digimon have unique stats and personalities<br>
+                • Rare Digimon have special abilities
+            </div>
+
+            <div class="success">
+                <strong>Catch Requirements</strong><br>
+                1. Valid X (Twitter) account linked<br>
+                2. Mention @PokettFun for verification<br>
+                3. Available Digimon slots (max 3)<br>
+                4. Ready to train and farm!
+            </div>
+
+            <div class="code-block">
+                <div class="prompt">digimon-x --tamer</div>
+                <pre>
+> Wild Digimon appeared!
+> Entering Digital World...
+> Generating Digimon stats...
+> Success! Agumon was captured!
+> Level: 5 | Type: Fire
+> Added to your party (1/3)
+                </pre>
+            </div>
+        </div>
+
+        <!-- Commands -->
+        <div class="doc-section framed neutral" id="commands">
+            <div class="section-title">3. Command Reference</div>
+            
+            <p>Digimon X features comprehensive Digimon commands powered by AI generation.</p>
+
+            <div class="command">
+                <div class="command-name">/tamer</div>
+                <strong>Purpose:</strong> Capture a wild Digimon for your party<br>
+                <strong>Usage:</strong> <code>/tamer @your_x_handle</code><br>
+                <strong>Cooldown:</strong> Success or failure determines next capture<br>
+                <strong>Requirements:</strong> Available party slot (max 3)
+            </div>
+
+            <div class="command">
+                <div class="command-name">/digivice</div>
+                <strong>Purpose:</strong> Check your Digimon party status<br>
+                <strong>Usage:</strong> <code>/digivice</code><br>
+                <strong>Cooldown:</strong> None<br>
+                <strong>Returns:</strong> All your Digimon stats and levels
+            </div>
+
+            <div class="command">
+                <div class="command-name">/farm</div>
+                <strong>Purpose:</strong> Farm with other tamers and your Digimon<br>
+                <strong>Usage:</strong> <code>/farm</code><br>
+                <strong>Cooldown:</strong> 5 minutes between farming<br>
+                <strong>Rewards:</strong> XP, levels, rare items
+            </div>
+
+            <div class="info">
+                <strong>PLANNED COMMANDS (Coming Soon)</strong><br>
+                • /trade - Trade Digimon with other tamers<br>
+                • /gym - Challenge Gym Leaders<br>
+                • /tournament - Enter Digimon tournaments<br>
+                • /digivolve - Digivolve your Digimon<br>
+                • /team - Create farming teams
+            </div>
+        </div>
+
+        <!-- AI System -->
+        <div class="doc-section framed neutral" id="ai-system">
+            <div class="section-title">4. AI Digimon Generation</div>
+            
+            <p>Digimon X uses <span class="highlight">Advanced AI</span> to generate unique Digimon with individual stats, types, and abilities.</p>
+
+            <div class="success">
+                <strong>DIGIMON GENERATION SYSTEM</strong><br>
+                Each Digimon is unique with:<br>
+                • Randomized stats and IVs<br>
+                • Type advantages and weaknesses<br>
+                • Special moves and abilities<br>
+                • Evolution potential<br>
+                • Rare Digimon chances (1/100)
+            </div>
+
+            <div class="code-block">
+                <div class="prompt">digimon-x --digimon-stats greymon</div>
+                <pre>
+> CHARIZARD - Fire/Flying Type
+> Level: 36 | HP: 120/120
+> Attack: 84 | Defense: 78 
+> Sp.Atk: 109 | Sp.Def: 85
+> Speed: 100
+> Moves: Flamethrower, Dragon Claw, Air Slash, Heat Wave
+> Ability: Blaze
+                </pre>
+            </div>
+
+            <div class="warning">
+                <strong>AI GENERATION FEATURES</strong><br>
+                Every capture attempt generates a completely unique Digimon with balanced stats for fair gameplay!
+            </div>
+
+            <div class="info">
+                <strong>DIGIMON RARITY TIERS</strong><br>
+                Common (60%) | Uncommon (25%) | Rare (10%) | Epic (4%) | Legendary (1%)
+            </div>
+        </div>
+
+        <!-- Digimon Care -->
+        <div class="doc-section framed neutral" id="digimon-care">
+            <div class="section-title">5. Digimon Care & Training</div>
+            
+            <p>Train your Digimon to increase their stats and prepare for farming!</p>
+
+            <div class="command">
+                <div class="command-name">Training Mechanics</div>
+                • <strong>Feed System:</strong> 60-minute cooldown between feeds<br>
+                • <strong>Berry Types:</strong> Different berries boost different stats<br>
+                • <strong>Growth Stages:</strong> Baby → Teen → Adult<br>
+                • <strong>Farm Ready:</strong> Higher level = more efficient farming
+            </div>
+
+            <div class="code-block">
+                <div class="prompt">digimon-x --feed agumon --food=meat</div>
+                <pre>
+> Feeding Pikachu with Sitrus Berry...
+> HP restored to full!
+> Happiness increased!
+> Growth: Baby → Teen (3/6 feeds)
+> Next feeding in: 59 minutes
+                </pre>
+            </div>
+
+            <div class="success">
+                <strong>TRAINING EVENTS</strong><br>
+                Special events for trainers:<br>
+                • Double XP weekends<br>
+                • Legendary Digimon appearances<br>
+                • Community day events<br>
+                • Rare Digimon increased rates
+            </div>
+        </div>
+
+        <!-- Growth System -->
+        <div class="doc-section framed neutral" id="growth-system">
+            <div class="section-title">6. Evolution System</div>
+            
+            <p>Digimon digivolve through feeding and battling, unlocking new forms and abilities!</p>
+
+            <div class="info">
+                <strong>GROWTH STAGES</strong><br>
+                <strong>Baby (0-2 feeds):</strong> Starting stats, learning moves<br>
+                <strong>Teen (3-5 feeds):</strong> Stat boosts, new abilities<br>
+                <strong>Adult (6+ feeds):</strong> Full power, evolution ready<br>
+                <strong>Champion (10+ wins):</strong> Elite stats, rare moves<br>
+                <strong>Master (50+ wins):</strong> Legendary status
+            </div>
+
+            <div class="warning">
+                <strong>EVOLUTION TRIGGERS</strong><br>
+                Digimon digivolve based on:<br>
+                • Feed count milestones<br>
+                • Battle victories<br>
+                • Level thresholds<br>
+                • Special items (coming soon)
+            </div>
+
+            <div class="code-block">
+                <div class="prompt">digimon-x --digivolution greymon</div>
+                <pre>
+> CHARMELEON Evolution Status:
+> Current Level: 35
+> Evolution: CHARIZARD at Level 36
+> Progress: 95% Complete
+> 
+> Stats Preview after evolution:
+> HP: 78 → 120 (+42)
+> Attack: 64 → 84 (+20)
+> New Type: Fire/Flying
+> New Move: Air Slash
+                </pre>
+            </div>
+        </div>
+
+        <!-- Social Features -->
+        <div class="doc-section framed neutral" id="social-features">
+            <div class="section-title">7. Trainer Community</div>
+            
+            <p>Join the Digimon X tamer community and compete for the top spots!</p>
+
+            <div class="success">
+                <strong>SOCIAL FEATURES</strong><br>
+                • Auto-share Digimon captures to X<br>
+                • Trainer leaderboards<br>
+                • Battle tournaments<br>
+                • Digimon trading (coming soon)<br>
+                • Team farming (coming soon)
+            </div>
+
+            <div class="command">
+                <div class="command-name">Community Events</div>
+                <strong>Weekly Tournaments:</strong> Battle for rare Digimon<br>
+                <strong>Legendary Raids:</strong> Team up to capture legendaries<br>
+                <strong>Trading Days:</strong> Exchange Digimon with others<br>
+                <strong>Shiny Hunts:</strong> Increased shiny rates
+            </div>
+
+            <div class="info">
+                <strong>LEADERBOARDS</strong><br>
+                • Top Tamers: Most farming success<br>
+                • Digimon Masters: Most Digimon captured<br>
+                • Battle Champions: Highest win streaks<br>
+                • Rare Collectors: Most rare Digimon<br>
+                • Elite Four: Top 4 trainers globally
+            </div>
+        </div>
+
+        <!-- Technical -->
+        <div class="doc-section framed neutral" id="technical">
+            <div class="section-title">8. Technical Specifications</div>
+            
+            <p>Digimon X runs on modern infrastructure for the best Digimon experience.</p>
+
+            <div class="code-block">
+                <div class="prompt">digimon-x --system-info</div>
+                <pre>
+> Digimon X System v1.0.0
+>
+> Backend: Node.js + Express.js
+> Database: SQLite3
+> AI Engine: Advanced Digimon Generation
+> Frontend: Digimon Digital Theme
+> Authentication: X (Twitter) OAuth
+> Hosting: High-performance servers
+> Updates: Real-time farming system
+> Features: Auto-feeding, Evolution tracking
+                </pre>
+            </div>
+
+            <div class="warning">
+                <strong>🔒 SECURITY MEASURES</strong><br>
+                • Military-grade encryption for all user data<br>
+                • Regular security audits by third-party firms<br>
+                • GDPR and CCPA compliant data handling<br>
+                • No personal data sold or shared with advertisers<br>
+                • Open-source security modules for transparency
+            </div>
+
+            <div class="success">
+                <strong>⚡ PERFORMANCE METRICS</strong><br>
+                • Average response time: <200ms globally<br>
+                • 99.9% uptime guarantee with SLA<br>
+                • Supports 100,000+ concurrent users<br>
+                • Auto-scaling infrastructure handles traffic spikes<br>
+                • CDN distribution across 50+ global regions
+            </div>
+        </div>
+
+        <!-- API -->
+        <div class="doc-section" id="api">
+            <div class="section-title">🔌 9. Developer API Documentation</div>
+            
+            <div class="warning">
+                <strong>📝 NOTE: API NOT AVAILABLE YET</strong><br>
+                The developer API is currently under development and not available during early access.<br>
+                We are working hard to provide comprehensive API endpoints for the community.<br>
+                Expected release: Q2 2025 with full documentation and developer tools.
+            </div>
+
+            <p>Digimon X will provide comprehensive APIs for developers building integrations, bots, and third-party applications once we exit early access phase.</p>
+
+            <div class="info">
+                <strong>🚧 PLANNED API FEATURES</strong><br>
+                • Pet information retrieval endpoints<br>
+                • Authenticated feeding and care actions<br>
+                • Real-time WebSocket connections<br>
+                • Social media integration tools<br>
+                • Community event participation<br>
+                • Leaderboard and statistics access
+            </div>
+
+            <div class="success">
+                <strong>🔔 GET NOTIFIED</strong><br>
+                Join our Discord or follow @PokettFun on X to be notified when the API becomes available.<br>
+                Early access developers will receive priority access to beta API endpoints.
+            </div>
+        </div>
+
+        <!-- Troubleshooting -->
+        <div class="doc-section" id="troubleshooting">
+            <div class="section-title">🔧 10. Troubleshooting & Support</div>
+            
+            <div class="warning">
+                <strong>❌ COMMON ISSUES</strong><br>
+                <strong>Problem:</strong> "Pet not responding to commands"<br>
+                <strong>Solution:</strong> Check feeding status - hungry pets have reduced responsiveness<br><br>
+                
+                <strong>Problem:</strong> "Cannot claim pet - account already verified"<br>
+                <strong>Solution:</strong> Each X account can only claim one pet. Contact support for assistance<br><br>
+                
+                <strong>Problem:</strong> "Evolution not triggering despite meeting requirements"<br>
+                <strong>Solution:</strong> Evolution has random factors. Try interacting more frequently
+            </div>
+
+        </div>
+
+        <!-- Community -->
+        <div class="doc-section framed neutral" id="community">
+            <div class="section-title">11. Trainer Guidelines</div>
+            
+            <p>Digimon X tamers follow the Digimon Tamer code of conduct.</p>
+
+            <div class="success">
+                <strong>TRAINER CODE</strong><br>
+                • Share Digimon captures and victories<br>
+                • Help new trainers get started<br>
+                • Participate in tournaments<br>
+                • Report bugs and glitches<br>
+                • Respect all trainers<br>
+                • Celebrate rare captures
+            </div>
+
+            <div class="warning">
+                <strong>PROHIBITED ACTIVITIES</strong><br>
+                • Multi-account Digimon farming<br>
+                • Bot usage for farming<br>
+                • Harassment of trainers<br>
+                • Exploit abuse<br>
+                • Selling Digimon for real money<br>
+                • Impersonating gym leaders
+            </div>
+
+            <div class="info">
+                <strong>🏛️ GOVERNANCE SYSTEM</strong><br>
+                Digimon X employs a democratic governance model where community members vote on major decisions:<br>
+                • New feature priorities<br>
+                • Evolution system changes<br>
+                • Community event themes<br>
+                • Disciplinary action appeals<br>
+                • Partnership and collaboration approvals
+            </div>
+        </div>
+
+        <!-- Changelog -->
+        <div class="doc-section" id="changelog">
+            <div class="section-title">📝 12. Version History & Roadmap</div>
+            
+            <div class="code-block">
+                <div class="prompt">digimon-x --version-history</div>
+                <pre>
+> VERSION 1.0.0 (Current) - July 25, 2025 - EARLY ACCESS LAUNCH
+  ✅ Core pet management system
+  ✅ Social media auto-sharing functionality  
+  ✅ Feeding card generation system
+  ✅ Terminal-style aesthetics
+  ✅ Basic growth and evolution paths
+  ✅ Claude Sonnet AI integration
+
+> UPCOMING - VERSION 1.1.0 (Q4 2025)
+  🚧 Enhanced personality development
+  🚧 Community interaction features
+  🚧 Advanced feeding mechanics
+  🚧 Mobile-responsive optimizations
+  🚧 Performance improvements
+
+> UPCOMING - VERSION 2.0.0 (Q1 2026)
+  🚧 Digimon farming system
+  🚧 Advanced breeding mechanics  
+  🚧 Developer API release
+  🚧 Community events framework
+  🚧 Cross-platform social sharing
+                </pre>
+            </div>
+
+            <div class="info">
+                <strong>🗺️ LONG-TERM ROADMAP (2025-2026)</strong><br>
+                • <strong>Q4 2025:</strong> Enhanced AI interactions, community features<br>
+                • <strong>Q1 2026:</strong> Battle system, breeding mechanics<br>
+                • <strong>Q2 2026:</strong> Mobile app launch (iOS/Android)<br>
+                • <strong>Q3 2026:</strong> Developer API and third-party integrations<br>
+                • <strong>Q4 2026:</strong> VR/AR pet visualization experiments<br>
+                • <strong>2027+:</strong> Advanced AI storylines, cross-platform transfers
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="framed no-hd" style="margin-top: 40px; text-align: center;">
+            <div style="color: var(--digivice-green); font-size: 12px; text-transform: uppercase;">
+                Digimon X Documentation v1.0.0 | Digital Monsters Are The Champions!<br>
+                Built by Digimon Tamers<br>
+                <a href="https://x.com/digimononx" class="x-handle">@digimononx</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digimon X - Digital Monster Collection</title>
+    <link rel="icon" type="image/png" href="/fav.png">
+    <!-- Digivice Theme CSS -->
+    <link rel="stylesheet" href="/digivice-theme.css">
+    <style>
+        /* ── Animated Moving Background ── */
+        body {
+            background: #0a0a2e !important;
+            position: relative;
+            overflow-x: hidden;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(0,120,255,0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(0,200,255,0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(100,0,255,0.08) 0%, transparent 50%);
+            animation: bgDrift 20s ease-in-out infinite;
+            z-index: -2;
+            pointer-events: none;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image:
+                linear-gradient(rgba(0,180,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,180,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: gridScroll 8s linear infinite;
+            z-index: -1;
+            pointer-events: none;
+        }
+        @keyframes bgDrift {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(2%, -2%) rotate(0.5deg); }
+            50% { transform: translate(-1%, 3%) rotate(-0.3deg); }
+            75% { transform: translate(-3%, -1%) rotate(0.2deg); }
+        }
+        @keyframes gridScroll {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(40px, 40px); }
+        }
+
+        /* ── Floating digital particles ── */
+        .digi-particles {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .digi-particle {
+            position: absolute;
+            width: 2px; height: 2px;
+            background: #00ccff;
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleFloat 6s ease-in-out infinite;
+        }
+        .digi-particle:nth-child(2) { left: 15%; animation-delay: 1s; background: #ff6600; }
+        .digi-particle:nth-child(3) { left: 30%; animation-delay: 2s; }
+        .digi-particle:nth-child(4) { left: 45%; animation-delay: 0.5s; background: #00ff88; }
+        .digi-particle:nth-child(5) { left: 60%; animation-delay: 3s; }
+        .digi-particle:nth-child(6) { left: 75%; animation-delay: 1.5s; background: #ffcc00; }
+        .digi-particle:nth-child(7) { left: 85%; animation-delay: 4s; }
+        .digi-particle:nth-child(8) { left: 10%; animation-delay: 2.5s; background: #8833ff; }
+        .digi-particle:nth-child(9) { left: 50%; animation-delay: 3.5s; }
+        .digi-particle:nth-child(10) { left: 90%; animation-delay: 0.8s; background: #ff3366; }
+        @keyframes particleFloat {
+            0% { bottom: -10px; opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { bottom: 110vh; opacity: 0; }
+        }
+
+        /* ── Core Layout ── */
+        .digivice-container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .digivice-screen {
+            background: rgba(5, 10, 30, 0.85) !important;
+            border: 1px solid rgba(0,180,255,0.3) !important;
+            backdrop-filter: blur(8px);
+        }
+
+        /* ── Nav ── */
+        .digivice-nav {
+            background: rgba(5, 15, 40, 0.9) !important;
+            border: 1px solid rgba(0,180,255,0.3) !important;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-link {
+            color: #00ccff;
+            text-decoration: none;
+            padding: 8px 16px;
+            background: rgba(0,120,255,0.15);
+            border: 1px solid rgba(0,180,255,0.3);
+            text-transform: uppercase;
+            font-family: 'Pixel Digivolve', 'PixelMplus12', monospace;
+            font-size: 11px;
+            display: inline-block;
+            transition: all 0.2s;
+        }
+        .nav-link:hover {
+            background: rgba(0,180,255,0.25);
+            border-color: #00ccff;
+            color: #fff;
+        }
+
+        /* ── Banner Header ── */
+        .banner-section {
+            text-align: center;
+            padding: 20px 0;
+        }
+        .banner-section img {
+            max-width: 100%;
+            max-height: 200px;
+            object-fit: contain;
+            image-rendering: auto;
+        }
+        .system-subtitle {
+            font-family: 'PixelMplus12', monospace;
+            color: rgba(0,204,255,0.6);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 10px;
+        }
+
+        /* ── Tamer Cards ── */
+        .tamer-group {
+            margin-bottom: 25px;
+        }
+        .tamer-header {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: linear-gradient(135deg, rgba(0,80,180,0.4), rgba(0,40,100,0.6));
+            border: 1px solid rgba(0,180,255,0.3);
+            border-bottom: none;
+            gap: 12px;
+        }
+        .tamer-avatar {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #00ccff;
+            border-radius: 4px;
+            background: #0a0a2e;
+            object-fit: cover;
+            image-rendering: pixelated;
+        }
+        .tamer-details h3 {
+            font-family: 'Pixel Digivolve', monospace;
+            font-size: 14px;
+            margin-bottom: 3px;
+        }
+        .tamer-details h3 a {
+            color: #ff6600;
+            text-decoration: none;
+        }
+        .tamer-details h3 a:hover { color: #ff8833; }
+        .tamer-stats {
+            font-family: 'PixelMplus12', monospace;
+            font-size: 10px;
+            color: rgba(0,204,255,0.7);
+            text-transform: uppercase;
+        }
+
+        .digimon-grid {
+            gap: 20px;
+        }
+
+        .digimon-card {
+            background: rgba(0,20,50,0.7) !important;
+            border: 1px solid rgba(0,180,255,0.2) !important;
+            transition: border-color 0.2s;
+        }
+        .digimon-card:hover {
+            border-color: #ff6600 !important;
+        }
+
+        .digimon-display {
+            background: rgba(0,5,15,0.9) !important;
+            border: 1px solid rgba(0,180,255,0.15) !important;
+        }
+
+        .digimon-sprite {
+            animation: spriteFloat 4s ease-in-out infinite;
+        }
+        @keyframes spriteFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .digimon-info {
+            font-family: 'PixelMplus12', monospace;
+        }
+        .info-row {
+            border-bottom: 1px solid rgba(0,180,255,0.1) !important;
+        }
+        .info-label { color: #00ccff; }
+        .info-value { color: #e0e8ff; }
+        .digimon-name { color: #ff6600 !important; }
+        .digimon-type { color: #ffcc00 !important; }
+
+        /* ── Search ── */
+        #trainer-search {
+            outline: none;
+            background: rgba(0,10,30,0.8);
+            border: 1px solid rgba(0,180,255,0.3);
+            color: #00ccff;
+            font-family: 'PixelMplus12', monospace;
+            text-transform: uppercase;
+            font-size: 11px;
+            padding: 10px 14px;
+        }
+        #trainer-search:focus {
+            border-color: #00ccff;
+            box-shadow: 0 0 8px rgba(0,180,255,0.2);
+        }
+        #trainer-search::placeholder { color: rgba(0,180,255,0.3); }
+        .search-stats {
+            color: rgba(0,204,255,0.5);
+            font-family: 'PixelMplus12', monospace;
+            font-size: 10px;
+        }
+
+        /* ── Agent Activity Log ── */
+        .agent-log-section { margin-bottom: 20px; }
+        .agent-log-title {
+            font-family: 'Pixel Digivolve', monospace;
+            font-size: 16px;
+            color: #00ccff;
+            margin-bottom: 4px;
+        }
+        .agent-log-title-jp {
+            font-family: 'PixelMplus12', monospace;
+            font-size: 10px;
+            color: rgba(255,204,0,0.7);
+            margin-bottom: 10px;
+        }
+        .agent-log-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 8px;
+            border-bottom: 1px solid rgba(0,180,255,0.1);
+            font-size: 10px;
+            font-family: 'PixelMplus12', monospace;
+        }
+        .agent-log-row:last-child { border-bottom: none; }
+        .agent-log-cmd {
+            display: inline-block;
+            padding: 2px 6px;
+            font-size: 8px;
+            text-transform: uppercase;
+            font-family: 'Pixel Digivolve', monospace;
+            color: #fff;
+            background: #444;
+            min-width: 50px;
+            text-align: center;
+        }
+        .agent-log-cmd.tame { background: #00884a; }
+        .agent-log-cmd.feed { background: #cc8800; }
+        .agent-log-cmd.check { background: #0066cc; }
+        .agent-log-cmd.battle { background: #cc2244; }
+        .agent-log-cmd.activity { background: #aa8800; }
+        .agent-log-cmd.digivolve { background: #7722bb; }
+        .agent-log-cmd.chat { background: #556; }
+        .agent-log-cmd.invite { background: #448822; }
+        .agent-log-cmd.help { background: #0066cc; }
+        .agent-log-cmd.release { background: #554433; }
+        .agent-log-cmd.format { background: #554433; }
+        .agent-log-user {
+            color: #ff6600;
+            min-width: 80px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .agent-log-text {
+            color: rgba(255,255,255,0.6);
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .agent-log-time {
+            color: rgba(0,204,255,0.4);
+            font-size: 8px;
+            white-space: nowrap;
+            min-width: 40px;
+            text-align: right;
+        }
+        .agent-log-xlink {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+        .agent-log-xlink svg {
+            width: 14px;
+            height: 14px;
+            fill: rgba(255,255,255,0.3);
+        }
+        .agent-log-xlink:hover svg { fill: #00ccff; }
+        .agent-log-empty {
+            color: rgba(0,204,255,0.4);
+            font-size: 10px;
+            text-align: center;
+            padding: 12px;
+            font-family: 'PixelMplus12', monospace;
+        }
+        .agent-live-dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #00ff88;
+            margin-left: 8px;
+            animation: livePulse 2s ease-in-out infinite;
+        }
+        @keyframes livePulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.2; }
+        }
+
+        .cursor {
+            animation: blink 1s infinite;
+            color: #00ccff;
+        }
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .hidden { display: none !important; }
+
+        /* ── Empty State ── */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+        }
+        .warning-text { color: #ff3366; }
+        .help-text { color: #00ff88; }
+        .command-list {
+            color: rgba(0,204,255,0.6);
+            font-family: 'PixelMplus12', monospace;
+            text-align: left;
+            display: inline-block;
+        }
+
+        /* ── Footer ── */
+        .system-footer {
+            border-top: 1px solid rgba(0,180,255,0.15) !important;
+            color: rgba(0,204,255,0.4);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .digimon-grid { grid-template-columns: 1fr !important; }
+            .banner-section img { max-height: 120px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Music -->
+    <audio id="bgm" loop preload="auto">
+        <source src="/ost.mp3" type="audio/mpeg">
+    </audio>
+    <button id="music-toggle" onclick="toggleMusic()" style="position:fixed;bottom:15px;right:15px;z-index:9999;background:rgba(5,10,30,0.9);border:1px solid rgba(0,180,255,0.4);color:#00ccff;font-family:'Pixel Digivolve',monospace;font-size:10px;padding:8px 14px;cursor:pointer;text-transform:uppercase;backdrop-filter:blur(8px);transition:all 0.2s;">
+        MUSIC: OFF
+    </button>
+
+    <!-- Floating particles -->
+    <div class="digi-particles">
+        <div class="digi-particle"></div><div class="digi-particle"></div>
+        <div class="digi-particle"></div><div class="digi-particle"></div>
+        <div class="digi-particle"></div><div class="digi-particle"></div>
+        <div class="digi-particle"></div><div class="digi-particle"></div>
+        <div class="digi-particle"></div><div class="digi-particle"></div>
+    </div>
+
+    <div class="digivice-container">
+        <!-- Digivice Navigation -->
+        <div class="digivice-nav">
+            <div class="nav-content">
+                <img src="/header.png" alt="DIGIMON X" style="max-height: 60px; object-fit: contain;">
+                <div class="nav-buttons">
+                    <a href="https://x.com/digimononx" target="_blank" class="nav-link">X</a>
+                    <a href="/docs" class="nav-link">DATABASE</a>
+                    <a href="javascript:location.reload()" class="nav-link" style="border-color:#ff6600; color:#ff6600;">SYNC</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Banner Header -->
+        <div class="digivice-screen banner-section">
+            <img src="/banner.gif" alt="DIGIMON X">
+            <div class="system-subtitle">デジタルモンスター ネットワーク &nbsp; | &nbsp; TAMER NETWORK ONLINE</div>
+        </div>
+
+        <!-- Agent Activity Log -->
+        <div class="digivice-screen agent-log-section">
+            <div class="agent-log-title">
+                DGMX AGENT LOGS
+                <span class="agent-live-dot"></span>
+            </div>
+            <div class="agent-log-title-jp">エージェント活動ログ</div>
+            <div id="agent-log">
+                <div class="agent-log-empty">loading agent activity...</div>
+            </div>
+        </div>
+
+        <!-- Tamer Search Interface -->
+        <div class="digivice-screen search-interface">
+            <div class="terminal-prompt">digimon-x --search-network</div>
+            <input type="text" id="trainer-search" class="search-input" placeholder="SEARCH TAMERS IN NETWORK..." 
+                   onkeyup="filterTrainers(this.value)">
+            <div class="search-stats">
+                NETWORK STATUS: <span id="trainer-count"><%= pets ? Object.keys(pets.reduce((groups, pet) => { groups[pet.ownerHandle] = true; return groups; }, {})).length : 0 %></span> TAMERS ONLINE | 
+                <span id="pokemon-count"><%= pets ? pets.length : 0 %></span> DIGIMON REGISTERED
+            </div>
+        </div>
+
+        <% if (pets && pets.length > 0) { %>
+            <% 
+            // Group pets by tamer
+            const trainerGroups = pets.reduce((groups, pet) => {
+                const trainer = pet.ownerHandle || 'Unknown';
+                if (!groups[trainer]) {
+                    groups[trainer] = {
+                        ownerHandle: trainer,
+                        ownerLink: pet.owner,
+                        digimon: []
+                    };
+                }
+                groups[trainer].digimon.push(pet);
+                return groups;
+            }, {});
+            %>
+            
+            <!-- Tamer Network -->
+            <div id="trainer-groups">
+                <% Object.values(trainerGroups).forEach(group => { %>
+                    <div class="tamer-group" data-trainer="<%= group.ownerHandle.toLowerCase() %>">
+                        <!-- Tamer Profile -->
+                        <div class="tamer-header" style="border-radius: 8px 8px 0 0; margin: 0 0 0 0;">
+                            <img src="/user.png" alt="Tamer" class="tamer-avatar">
+                            <div class="tamer-details">
+                                <h3><a href="<%= group.ownerLink %>" target="_blank"><%= group.ownerHandle %></a></h3>
+                                <div class="tamer-stats">
+                                    DIGIMON REGISTERED: <%= group.digimon.length %>/1
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Digimon Registry -->
+                        <div class="digimon-grid">
+                            <% group.digimon.forEach(pet => { %>
+                                <div class="digimon-card">
+                                    <!-- Digimon Display Screen -->
+                                    <div class="digimon-display">
+                                        <% if (pet.ascii && pet.ascii.startsWith('/digimon/')) { %>
+                                            <!-- Display Digimon Sprite -->
+                                            <img src="<%= pet.ascii %>" alt="<%= pet.name %>" 
+                                                 class="digimon-sprite" 
+                                                 data-pet-race="<%= pet.race.toLowerCase() %>" 
+                                                 data-pet-name="<%= pet.name.toLowerCase() %>" />
+                                        <% } else { %>
+                                            <!-- Fallback to ASCII Display -->
+                                            <pre class="digimon-ascii" 
+                                                 data-pet-race="<%= pet.race.toLowerCase() %>" 
+                                                 data-pet-name="<%= pet.name.toLowerCase() %>"><%= pet.ascii %></pre>
+                                        <% } %>
+                                    </div>
+                                    
+                                    <!-- Digimon Data -->
+                                    <div class="digimon-info">
+                                        <div class="info-row">
+                                            <span class="info-label">Name:</span>
+                                            <span class="info-value digimon-name"><%= pet.name %></span>
+                                        </div>
+                                        
+                                        <div class="info-row">
+                                            <span class="info-label">Type:</span>
+                                            <span class="info-value digimon-type"><%= pet.race %></span>
+                                        </div>
+                                        
+                                        <div class="info-row">
+                                            <span class="info-label">Status:</span>
+                                            <span class="info-value status-healthy"><%= pet.status %></span>
+                                        </div>
+                                        
+                                        <div class="info-row">
+                                            <span class="info-label">Level:</span>
+                                            <span class="info-value status-healthy"><%= pet.growth_stage %></span>
+                                        </div>
+                                        
+                                        <div class="info-row">
+                                            <span class="info-label">Energy:</span>
+                                            <% 
+                                            let energyClass = 'status-healthy';
+                                            if (pet.hungerStatus === 'Hungry') energyClass = 'status-critical';
+                                            else if (pet.hungerStatus === 'Getting Hungry') energyClass = 'status-warning';
+                                            %>
+                                            <span class="info-value <%= energyClass %>"><%= pet.hungerStatus %></span>
+                                        </div>
+                                        
+                                        <div class="info-row">
+                                            <span class="info-label">Activity:</span>
+                                            <span class="info-value"><%= pet.activity %></span>
+                                        </div>
+                                        
+                                        <div class="info-row" style="border: none; margin-top: 10px; font-size: 10px; color: var(--digivice-gray);">
+                                            <span>FEEDS: <%= pet.feed_count %></span>
+                                            <span>AGE: <%= Math.floor((Date.now() - pet.created_at * 1000) / (1000 * 60 * 60 * 24)) %>D</span>
+                                            <span>ID: #<%= pet.id %></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        <% } else { %>
+            <div class="digivice-screen empty-state">
+                <div class="terminal-prompt">digimon-x --network-scan</div>
+                <br>
+                <div class="warning-text">NETWORK ERROR: NO DIGIMON DETECTED</div>
+                <div class="help-text">└─ Initialize tamer protocol to begin digital partnership</div>
+                <br>
+                <div class="command-list">
+                    AVAILABLE COMMANDS:<br>
+                    &nbsp;&nbsp;digimon-x --admin&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# ACCESS SYSTEM PANEL<br>
+                    &nbsp;&nbsp;digimon-x --tamer&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# INITIATE PARTNER SEARCH<br>
+                    &nbsp;&nbsp;digimon-x --refresh&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# RESYNC NETWORK
+                </div>
+                <br>
+                <span class="cursor">█</span>
+            </div>
+        <% } %>
+        
+        <!-- System Footer -->
+        <div class="system-footer" style="text-align:center; padding:20px;">
+            <div id="footer-icons" style="display:flex; justify-content:center; gap:12px; margin-bottom:12px; flex-wrap:wrap;"></div>
+            <div style="font-family:'Pixel Digivolve','PixelMplus12',monospace; font-size:11px; letter-spacing:1px;">
+                COPYRIGHT DGMX 2026 pump.fun
+            </div>
+            <div style="font-family:'Pixel Digivolve','PixelMplus12',monospace; font-size:9px; margin-top:6px; opacity:0.6;">
+                <%= pets ? pets.length : 0 %> DIGITAL PARTNERS REGISTERED | SYSTEM ONLINE
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tamer network search functionality
+        function filterTrainers(searchTerm) {
+            const tamerGroups = document.querySelectorAll('.tamer-group');
+            const searchLower = searchTerm.toLowerCase().trim();
+            
+            let visibleTamers = 0;
+            let visibleDigimon = 0;
+            
+            tamerGroups.forEach(group => {
+                const tamerName = group.dataset.trainer;
+                const digimonCards = group.querySelectorAll('.digimon-card');
+                
+                if (searchTerm === '' || tamerName.includes(searchLower)) {
+                    group.style.display = 'block';
+                    visibleTamers++;
+                    visibleDigimon += digimonCards.length;
+                } else {
+                    group.style.display = 'none';
+                }
+            });
+            
+            // Update network status
+            document.getElementById('trainer-count').textContent = visibleTamers;
+            document.getElementById('pokemon-count').textContent = visibleDigimon;
+        }
+        
+        // Auto-sync every 5 minutes
+        setInterval(() => {
+            console.log('NETWORK SYNC: Refreshing tamer data...');
+            location.reload();
+        }, 5 * 60 * 1000);
+        
+        // Initialize Digivice interface
+        document.addEventListener('DOMContentLoaded', function() {
+            const digimonElements = document.querySelectorAll('.digimon-ascii, .digimon-sprite');
+            
+            digimonElements.forEach((element, index) => {
+                const race = element.dataset.petRace || '';
+                const name = element.dataset.petName || '';
+                
+                // Apply type-specific styling
+                if (race.includes('fire') || race.includes('flame') || race.includes('dragon')) {
+                    element.parentElement.style.borderColor = 'var(--digivice-red)';
+                } else if (race.includes('water') || race.includes('sea') || race.includes('ice')) {
+                    element.parentElement.style.borderColor = 'var(--digivice-cyan)';
+                } else if (race.includes('plant') || race.includes('nature') || race.includes('earth')) {
+                    element.parentElement.style.borderColor = 'var(--digivice-green)';
+                } else if (race.includes('electric') || race.includes('thunder') || race.includes('light')) {
+                    element.parentElement.style.borderColor = 'var(--digivice-yellow)';
+                } else if (race.includes('dark') || race.includes('shadow') || race.includes('virus')) {
+                    element.parentElement.style.borderColor = 'var(--digivice-purple)';
+                }
+                
+                // Simple hover interaction
+                element.addEventListener('mouseenter', function() {
+                    this.style.opacity = '0.8';
+                });
+                
+                element.addEventListener('mouseleave', function() {
+                    this.style.opacity = '1';
+                });
+            });
+            
+            // Clean interface - no special effects
+            
+            console.log('DIGIVICE INTERFACE: System initialized successfully');
+        });
+
+        // ── Footer Icons (auto-load from /icon/ folder) ──
+        fetch('/api/icons').then(r => r.json()).then(data => {
+            var container = document.getElementById('footer-icons');
+            if (data.icons && data.icons.length > 0) {
+                container.innerHTML = data.icons.map(function(icon) {
+                    return '<img src="/icon/' + icon + '" alt="" style="height:28px; image-rendering:pixelated; opacity:0.9;">';
+                }).join('');
+            }
+        }).catch(function() {});
+
+        // ── Agent Activity Log ──
+        function escapeHtml(str) {
+            var d = document.createElement('div');
+            d.textContent = str || '';
+            return d.innerHTML;
+        }
+
+        function timeAgo(ts) {
+            if (!ts) return '?';
+            var secs = Math.floor((Date.now() - new Date(ts).getTime()) / 1000);
+            if (secs < 0) secs = 0;
+            if (secs < 60) return secs + 's';
+            if (secs < 3600) return Math.floor(secs / 60) + 'm';
+            if (secs < 86400) return Math.floor(secs / 3600) + 'h';
+            return Math.floor(secs / 86400) + 'd';
+        }
+
+        function renderAgentLog(replies) {
+            var container = document.getElementById('agent-log');
+            if (!replies || replies.length === 0) {
+                container.innerHTML = '<div class="agent-log-empty">no agent activity yet -- mention @digimononx on X to interact</div>';
+                return;
+            }
+            var xSvg = '<svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>';
+            container.innerHTML = replies.map(function(r) {
+                var cmd = r.command || 'chat';
+                var replyText = (r.our_reply || '').replace(/@\w+\s*/g, '').slice(0, 80);
+                var xUrl = r.reply_tweet_id ? 'https://x.com/digimononx/status/' + r.reply_tweet_id : '';
+                return '<div class="agent-log-row">' +
+                    '<span class="agent-log-cmd ' + cmd + '">' + cmd + '</span>' +
+                    '<span class="agent-log-user">@' + escapeHtml(r.from_username || '?') + '</span>' +
+                    '<span class="agent-log-text">' + escapeHtml(replyText) + '</span>' +
+                    '<span class="agent-log-time">' + timeAgo(r.created_at) + '</span>' +
+                    (xUrl ? '<a href="' + xUrl + '" target="_blank" class="agent-log-xlink" title="View on X">' + xSvg + '</a>' : '<span class="agent-log-xlink"></span>') +
+                    '</div>';
+            }).join('');
+        }
+
+        async function refreshAgentLog() {
+            try {
+                var res = await fetch('/api/agent/activity?limit=10');
+                var data = await res.json();
+                renderAgentLog(data.activity || data || []);
+            } catch (e) { /* ignore */ }
+        }
+
+        refreshAgentLog();
+        setInterval(refreshAgentLog, 15000);
+
+        // Background Music
+        let musicPlaying = false;
+        function toggleMusic() {
+            const audio = document.getElementById('bgm');
+            const btn = document.getElementById('music-toggle');
+            if (musicPlaying) {
+                audio.pause();
+                btn.textContent = 'MUSIC: OFF';
+                btn.style.borderColor = 'rgba(0,180,255,0.4)';
+                btn.style.color = '#00ccff';
+                localStorage.setItem('digimonx-music', 'off');
+            } else {
+                audio.volume = 0.3;
+                audio.play().catch(() => {});
+                btn.textContent = 'MUSIC: ON';
+                btn.style.borderColor = '#ff6600';
+                btn.style.color = '#ff6600';
+                localStorage.setItem('digimonx-music', 'on');
+            }
+            musicPlaying = !musicPlaying;
+        }
+        // Auto-play if previously enabled
+        if (localStorage.getItem('digimonx-music') === 'on') {
+            document.addEventListener('click', function autoPlay() {
+                const audio = document.getElementById('bgm');
+                audio.volume = 0.3;
+                audio.play().then(() => {
+                    musicPlaying = true;
+                    const btn = document.getElementById('music-toggle');
+                    btn.textContent = 'MUSIC: ON';
+                    btn.style.borderColor = '#ff6600';
+                    btn.style.color = '#ff6600';
+                }).catch(() => {});
+                document.removeEventListener('click', autoPlay);
+            }, { once: true });
+        }
+    </script>
+</body>
+</html>

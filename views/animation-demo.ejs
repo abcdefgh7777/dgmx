@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASCII Pet Animation Demo</title>
+    <link rel="icon" type="image/png" href="/fav.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+        }
+        .ascii-art {
+            font-family: 'Courier New', monospace;
+            line-height: 1.2;
+            color: #22d3ee;
+            text-shadow: 0 0 10px rgba(34, 211, 238, 0.3);
+            animation: petFloat 3s ease-in-out infinite;
+            transform-origin: center;
+        }
+        
+        @keyframes petFloat {
+            0%, 100% { 
+                transform: translateY(0px) scale(1);
+                text-shadow: 0 0 10px rgba(34, 211, 238, 0.3);
+            }
+            50% { 
+                transform: translateY(-5px) scale(1.02);
+                text-shadow: 0 0 15px rgba(34, 211, 238, 0.5);
+            }
+        }
+        
+        .ascii-art[data-type="dragon"] {
+            animation: dragonBreathe 2s ease-in-out infinite;
+        }
+        
+        @keyframes dragonBreathe {
+            0%, 100% { 
+                transform: scale(1);
+                color: #ef4444;
+                text-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+            }
+            50% { 
+                transform: scale(1.05);
+                color: #f97316;
+                text-shadow: 0 0 25px rgba(249, 115, 22, 0.8);
+            }
+        }
+        
+        .ascii-art[data-type="robot"] {
+            animation: robotPulse 1.8s ease-in-out infinite;
+        }
+        
+        @keyframes robotPulse {
+            0%, 100% { 
+                color: #22d3ee;
+                text-shadow: 0 0 10px rgba(34, 211, 238, 0.4);
+            }
+            50% { 
+                color: #06b6d4;
+                text-shadow: 0 0 20px rgba(6, 182, 212, 0.8), 0 0 30px rgba(6, 182, 212, 0.4);
+            }
+        }
+        
+        .ascii-art[data-type="cosmic"] {
+            animation: cosmicTwinkle 2.5s ease-in-out infinite;
+        }
+        
+        @keyframes cosmicTwinkle {
+            0%, 100% { 
+                color: #8b5cf6;
+                text-shadow: 0 0 15px rgba(139, 92, 246, 0.5);
+            }
+            25% { 
+                color: #ec4899;
+                text-shadow: 0 0 20px rgba(236, 72, 153, 0.7);
+            }
+            50% { 
+                color: #06b6d4;
+                text-shadow: 0 0 25px rgba(6, 182, 212, 0.8);
+            }
+            75% { 
+                color: #10b981;
+                text-shadow: 0 0 20px rgba(16, 185, 129, 0.7);
+            }
+        }
+        
+        .demo-card {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+        }
+    </style>
+</head>
+<body class="text-white">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-4xl font-bold text-center mb-8 text-cyan-400">🎬 ASCII Pet Animation Demo</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Dragon Animation -->
+            <div class="demo-card rounded-lg p-6">
+                <h3 class="text-lg font-bold mb-4 text-red-400">🔥 Dragon (Breathing)</h3>
+                <pre class="ascii-art bg-gray-900 p-4 rounded" data-type="dragon">    /\\   /\\
+   (  -_-  )
+  __) ~~~ (__
+ /  \\     /  \\
+~    ~~~~~    ~</pre>
+                <p class="text-sm text-gray-400 mt-2">Fire Dragons breathe and glow</p>
+            </div>
+            
+            <!-- Robot Animation -->
+            <div class="demo-card rounded-lg p-6">
+                <h3 class="text-lg font-bold mb-4 text-cyan-400">🤖 Robot (Pulsing)</h3>
+                <pre class="ascii-art bg-gray-900 p-4 rounded" data-type="robot">  [###]
+  |o_o|
+  |---|
+  [___]
+   |||</pre>
+                <p class="text-sm text-gray-400 mt-2">Robots pulse with electric energy</p>
+            </div>
+            
+            <!-- Cosmic Animation -->
+            <div class="demo-card rounded-lg p-6">
+                <h3 class="text-lg font-bold mb-4 text-purple-400">✨ Cosmic (Twinkling)</h3>
+                <pre class="ascii-art bg-gray-900 p-4 rounded" data-type="cosmic">    .
+   . .
+  . * .
+   . .
+    .</pre>
+                <p class="text-sm text-gray-400 mt-2">Cosmic beings twinkle with colors</p>
+            </div>
+            
+            <!-- Default Animation -->
+            <div class="demo-card rounded-lg p-6">
+                <h3 class="text-lg font-bold mb-4 text-cyan-400">🐾 Default (Floating)</h3>
+                <pre class="ascii-art bg-gray-900 p-4 rounded">  /\\_/\\  
+ ( o.o ) 
+  > ^ <</pre>
+                <p class="text-sm text-gray-400 mt-2">Other pets gently float</p>
+            </div>
+        </div>
+        
+        <div class="text-center mt-8">
+            <a href="/" class="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-lg transition duration-300">
+                ← Back to Pet Gallery
+            </a>
+        </div>
+    </div>
+</body>
+</html>

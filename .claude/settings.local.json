@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install)",
+      "Bash(npm start)",
+      "Bash(pkill:*)",
+      "WebSearch",
+      "Read(//Users/jammy/Documents/pokefun/**)",
+      "Bash(grep:*)",
+      "Bash(cp:*)",
+      "Bash(npm install:*)",
+      "Bash(node:*)",
+      "Bash(npm rebuild:*)",
+      "Bash(PORT=5555 timeout 5 node:*)",
+      "WebFetch(domain:withthewill.net)",
+      "WebFetch(domain:wikimon.net)",
+      "Bash(for d in Baby Child Adult Perfect Ultimate Additions)",
+      "Bash(do echo \"=== $d ===\")",
+      "Read(//c/COOK/digimonnew/$d/**)",
+      "Bash(done)",
+      "Bash(netstat:*)",
+      "Bash(taskkill:*)",
+      "Bash(ls:*)",
+      "Bash(curl:*)",
+      "WebFetch(domain:digimon.net)",
+      "Bash(where gh:*)",
+      "Bash(git config:*)",
+      "Bash(git ls-remote:*)",
+      "Bash(winget install:*)",
+      "Bash(export:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
