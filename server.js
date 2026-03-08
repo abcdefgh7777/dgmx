@@ -65,6 +65,10 @@ app.get('/docs', (req, res) => {
   res.render('docs');
 });
 
+app.get('/ads', (req, res) => {
+  res.render('ads');
+});
+
 // Admin authentication middleware
 const requireAuth = (req, res, next) => {
   if (req.session.authenticated) {
@@ -449,6 +453,12 @@ app.post('/api/admin/agent/stop', requireAuth, (req, res) => {
 app.get('/api/admin/agent/status', requireAuth, (req, res) => {
   const status = autoReply.getAutoReplyStatus();
   res.json(status);
+});
+
+// Manual poll trigger — check mentions now
+app.post('/api/admin/agent/poll-now', requireAuth, (req, res) => {
+  const result = autoReply.pollNow();
+  res.json(result);
 });
 
 // Get recent agent replies

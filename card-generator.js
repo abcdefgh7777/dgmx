@@ -38,6 +38,28 @@ async function loadImg(relativePath) {
 function getGifPath(pet) { return pet.ascii || pet.gifPath || null; }
 function getTypeColor(type) { return TYPE_COLORS[type] || TYPE_COLORS.Unknown; }
 
+async function loadAvatar(url) {
+  if (!url) return null;
+  try { return await loadImage(url); } catch (e) { return null; }
+}
+
+function drawAvatar(ctx, img, cx, cy, radius) {
+  if (!img) return;
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+  ctx.closePath();
+  ctx.clip();
+  ctx.drawImage(img, cx - radius, cy - radius, radius * 2, radius * 2);
+  ctx.restore();
+  // Border ring
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+}
+
 function drawDigimon(ctx, img, cx, cy, size) {
   if (!img) return;
   const ratio = Math.min(size / img.width, size / img.height);
@@ -230,6 +252,14 @@ async function generateStatusCard(pet) {
   ctx.fillText('DIGIMON STATUS', 400, 35);
   drawSepLine(ctx, w, 48);
 
+  // Tamer avatar (top-right area)
+  const avatarImg = await loadAvatar(pet.avatar);
+  if (avatarImg) {
+    drawAvatar(ctx, avatarImg, 700, 100, 32);
+    ctx.font = 'bold 12px ' + F_HEAD; ctx.fillStyle = '#ff6600'; ctx.textAlign = 'center';
+    ctx.fillText('@' + (pet.ownerHandle || '').toUpperCase(), 700, 142);
+  }
+
   // Digimon image
   const gifPath = getGifPath(pet);
   if (gifPath) { const img = await loadImg(gifPath); drawDigimon(ctx, img, 400, 130, 130); }
@@ -302,6 +332,14 @@ async function generateFeedCard(pet, feedCount, growthStage, foodItem, reaction)
   ctx.font = '12px ' + F_BODY; ctx.fillStyle = 'rgba(255,255,255,0.3)';
   ctx.fillText('デジモンにデータを与える', 400, 52);
   drawSepLine(ctx, w, 60, 'rgba(0,255,150,0.3)');
+
+  // Tamer avatar (top-right)
+  const avatarImg = await loadAvatar(pet.avatar);
+  if (avatarImg) {
+    drawAvatar(ctx, avatarImg, 700, 100, 32);
+    ctx.font = 'bold 12px ' + F_HEAD; ctx.fillStyle = '#ff6600'; ctx.textAlign = 'center';
+    ctx.fillText('@' + (pet.ownerHandle || '').toUpperCase(), 700, 142);
+  }
 
   // Digimon image
   const gifPath = getGifPath(pet);
@@ -384,8 +422,11 @@ async function generateBattleCard(pet1, pet2, winner, battleLog, owner1, owner2,
   ctx.font = 'bold 22px ' + F_HEAD; ctx.fillStyle = '#fff'; ctx.textAlign = 'center';
   ctx.fillText(pet1.name.toUpperCase(), p1x, 188);
   drawTypeBadgeSolid(ctx, pet1.race || 'Unknown', p1x, 210);
-  ctx.font = 'bold 13px ' + F_HEAD; ctx.fillStyle = 'rgba(255,255,255,0.5)';
-  ctx.fillText('@' + owner1.toUpperCase() + '  LV.' + (pet1.level || 1), p1x, 234);
+  // Avatar + owner
+  const av1 = await loadAvatar(pet1.avatar);
+  if (av1) { drawAvatar(ctx, av1, p1x - 60, 230, 16); }
+  ctx.font = 'bold 13px ' + F_HEAD; ctx.fillStyle = 'rgba(255,255,255,0.5)'; ctx.textAlign = 'center';
+  ctx.fillText('@' + owner1.toUpperCase() + '  LV.' + (pet1.level || 1), p1x + (av1 ? 5 : 0), 234);
 
   // VS badge
   ctx.font = 'bold 28px ' + F_HEAD;
@@ -401,8 +442,11 @@ async function generateBattleCard(pet1, pet2, winner, battleLog, owner1, owner2,
   ctx.font = 'bold 22px ' + F_HEAD; ctx.fillStyle = '#fff'; ctx.textAlign = 'center';
   ctx.fillText(pet2.name.toUpperCase(), p2x, 188);
   drawTypeBadgeSolid(ctx, pet2.race || 'Unknown', p2x, 210);
-  ctx.font = 'bold 13px ' + F_HEAD; ctx.fillStyle = 'rgba(255,255,255,0.5)';
-  ctx.fillText('@' + owner2.toUpperCase() + '  LV.' + (pet2.level || 1), p2x, 234);
+  // Avatar + owner
+  const av2 = await loadAvatar(pet2.avatar);
+  if (av2) { drawAvatar(ctx, av2, p2x - 60, 230, 16); }
+  ctx.font = 'bold 13px ' + F_HEAD; ctx.fillStyle = 'rgba(255,255,255,0.5)'; ctx.textAlign = 'center';
+  ctx.fillText('@' + owner2.toUpperCase() + '  LV.' + (pet2.level || 1), p2x + (av2 ? 5 : 0), 234);
 
   drawSepLine(ctx, w, 250, 'rgba(255,80,80,0.3)');
 

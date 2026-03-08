@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DGMX</title>
+    <link rel="icon" type="image/png" href="/fav.png">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* ── Scene container ── */
+        .cinema {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        .scene {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease;
+        }
+        .scene.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* ── Typography ── */
+        .t-huge {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(50px, 10vw, 120px);
+            font-weight: 900;
+            letter-spacing: 8px;
+            line-height: 1;
+        }
+        .t-big {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(24px, 4vw, 48px);
+            font-weight: 700;
+            letter-spacing: 3px;
+        }
+        .t-med {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(14px, 2vw, 22px);
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+        .t-body {
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(12px, 1.4vw, 16px);
+            font-weight: 300;
+            letter-spacing: 1px;
+            color: #999;
+            line-height: 1.6;
+        }
+        .t-small {
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(10px, 1vw, 13px);
+            font-weight: 400;
+            letter-spacing: 2px;
+            color: #555;
+            text-transform: uppercase;
+        }
+
+        /* ── Animations ── */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        .scene.active .fade-up {
+            animation: fadeUp 0.7s ease-out forwards;
+        }
+        .scene.active .fade-up.d1 { animation-delay: 0.2s; }
+        .scene.active .fade-up.d2 { animation-delay: 0.5s; }
+        .scene.active .fade-up.d3 { animation-delay: 0.8s; }
+        .scene.active .fade-up.d4 { animation-delay: 1.1s; }
+        .scene.active .fade-up.d5 { animation-delay: 1.4s; }
+        .scene.active .fade-up.d6 { animation-delay: 1.7s; }
+
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .scale-in {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        .scene.active .scale-in {
+            animation: scaleIn 0.6s ease-out forwards;
+        }
+        .scene.active .scale-in.d1 { animation-delay: 0.2s; }
+        .scene.active .scale-in.d2 { animation-delay: 0.5s; }
+        .scene.active .scale-in.d3 { animation-delay: 0.8s; }
+        @keyframes scaleIn {
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* ── Digimon sprite ── */
+        .digi {
+            image-rendering: pixelated;
+            object-fit: contain;
+        }
+
+        /* ══════════════════════
+           SCENE: BLACK OPEN
+           ══════════════════════ */
+        .s-black { background: #000; }
+
+        /* ══════════════════════
+           SCENE: LOGO
+           ══════════════════════ */
+        .s-logo { background: #000; }
+        .logo-main {
+            color: #fff;
+        }
+        .logo-line {
+            width: 60px;
+            height: 2px;
+            background: #ff6600;
+            margin: 16px auto;
+        }
+
+        /* ══════════════════════
+           SCENE: WHAT IF
+           ══════════════════════ */
+        .s-whatif { background: #000; }
+
+        /* ══════════════════════
+           SCENE: TAME
+           ══════════════════════ */
+        .s-tame { background: #050508; }
+        .tame-row {
+            display: flex;
+            gap: 24px;
+            margin-top: 32px;
+            align-items: flex-end;
+        }
+        .tame-item {
+            text-align: center;
+        }
+        .tame-item img {
+            width: 64px; height: 64px;
+        }
+        .tame-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            color: #666;
+            letter-spacing: 1px;
+            margin-top: 8px;
+        }
+
+        /* ══════════════════════
+           SCENE: EVOLUTION
+           ══════════════════════ */
+        .s-evo { background: #050508; }
+        .evo-chain {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 36px;
+        }
+        .evo-item {
+            text-align: center;
+        }
+        .evo-item img { width: 72px; height: 72px; }
+        .evo-item-label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 9px;
+            color: #ff6600;
+            letter-spacing: 1px;
+            margin-top: 6px;
+        }
+        .evo-item-name {
+            font-size: 11px;
+            color: #888;
+            margin-top: 2px;
+        }
+        .evo-arrow {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            color: #333;
+        }
+
+        /* ══════════════════════
+           SCENE: BATTLE
+           ══════════════════════ */
+        .s-battle { background: #050508; }
+        .battle-vs {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            margin-top: 36px;
+        }
+        .battle-side {
+            text-align: center;
+        }
+        .battle-side img { width: 90px; height: 90px; }
+        .battle-side-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            letter-spacing: 2px;
+            margin-top: 8px;
+        }
+        .battle-side-type {
+            font-size: 11px;
+            color: #666;
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+        .vs-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(32px, 6vw, 56px);
+            font-weight: 900;
+            color: #ff3366;
+        }
+        .battle-log {
+            margin-top: 32px;
+            max-width: 550px;
+            text-align: left;
+        }
+        .battle-log-line {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            color: #555;
+            line-height: 1.8;
+            opacity: 0;
+            transform: translateX(-10px);
+        }
+        .scene.active .battle-log-line {
+            animation: lineIn 0.4s ease-out forwards;
+        }
+        .scene.active .battle-log-line:nth-child(1) { animation-delay: 0.6s; }
+        .scene.active .battle-log-line:nth-child(2) { animation-delay: 1.2s; }
+        .scene.active .battle-log-line:nth-child(3) { animation-delay: 1.8s; }
+        .scene.active .battle-log-line:nth-child(4) { animation-delay: 2.4s; color: #fff; }
+        @keyframes lineIn {
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* ══════════════════════
+           SCENE: TYPES
+           ══════════════════════ */
+        .s-types { background: #050508; }
+        .type-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            max-width: 500px;
+            margin-top: 32px;
+        }
+        .type-pill {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #fff;
+            opacity: 0;
+            transform: scale(0.7);
+        }
+        .scene.active .type-pill {
+            animation: pillIn 0.3s ease-out forwards;
+        }
+        @keyframes pillIn {
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* ══════════════════════
+           SCENE: SHOWCASE
+           ══════════════════════ */
+        .s-showcase { background: #050508; }
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 72px);
+            gap: 12px;
+            margin-top: 32px;
+        }
+        .showcase-grid img {
+            width: 72px; height: 72px;
+            opacity: 0;
+            transform: scale(0.5);
+        }
+        .scene.active .showcase-grid img {
+            animation: gridIn 0.3s ease-out forwards;
+        }
+        @keyframes gridIn {
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* ══════════════════════
+           SCENE: AI
+           ══════════════════════ */
+        .s-ai { background: #050508; }
+        .ai-features {
+            display: flex;
+            gap: 24px;
+            margin-top: 36px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .ai-feat {
+            width: 180px;
+            text-align: center;
+        }
+        .ai-feat-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            color: #fff;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+        .ai-feat-desc {
+            font-size: 12px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* ══════════════════════
+           SCENE: CTA
+           ══════════════════════ */
+        .s-cta { background: #000; }
+        .cta-handle {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(18px, 3vw, 28px);
+            color: #ff6600;
+            letter-spacing: 4px;
+            margin-top: 16px;
+        }
+        .cta-row {
+            display: flex;
+            gap: 32px;
+            margin-top: 36px;
+        }
+        .cta-step {
+            text-align: center;
+        }
+        .cta-num {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            font-weight: 900;
+            color: #ff6600;
+        }
+        .cta-label {
+            font-size: 11px;
+            color: #666;
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+        .cta-digimon {
+            display: flex;
+            gap: 16px;
+            margin-top: 40px;
+        }
+        .cta-digimon img {
+            width: 52px; height: 52px;
+        }
+
+        /* ── Progress bar ── */
+        .progress-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            height: 2px;
+            background: #ff6600;
+            z-index: 100;
+            transition: width 0.3s linear;
+        }
+
+        /* ── Replay button ── */
+        .replay-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: none;
+            border: 1px solid #333;
+            color: #555;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            letter-spacing: 2px;
+            padding: 8px 16px;
+            cursor: pointer;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        .replay-btn.show { opacity: 1; }
+        .replay-btn:hover { border-color: #ff6600; color: #ff6600; }
+    </style>
+</head>
+<body>
+
+<div class="cinema">
+
+    <!-- 0: BLACK -->
+    <div class="scene s-black active" data-dur="1500" id="s0"></div>
+
+    <!-- 1: LOGO -->
+    <div class="scene s-logo" data-dur="3500" id="s1">
+        <div class="t-huge logo-main fade-up">DGMX</div>
+        <div class="logo-line fade-up d1"></div>
+        <div class="t-small fade-up d2">DIGITAL MONSTER ON X</div>
+        <div class="t-small fade-up d3" style="color:#333;margin-top:12px;letter-spacing:4px;">デジタルモンスター</div>
+    </div>
+
+    <!-- 2: WHAT IF -->
+    <div class="scene s-whatif" data-dur="3500" id="s2">
+        <div class="t-small fade-up" style="color:#333;margin-bottom:12px;">もしもXでデジモンを育てられたら？</div>
+        <div class="t-big fade-up d1" style="color:#999;">What if you could raise</div>
+        <div class="t-big fade-up d2" style="color:#fff;">a Digimon on X?</div>
+    </div>
+
+    <!-- 3: TAME -->
+    <div class="scene s-tame" data-dur="4500" id="s3">
+        <div class="t-med fade-up" style="color:#ff6600;">TAME</div>
+        <div class="t-small fade-up d1" style="color:#333;margin-top:6px;">テイム — デジモンを捕まえろ</div>
+        <div class="t-body fade-up d1" style="margin-top:12px;">Mention @digimononx. Get a random baby Digimon.</div>
+        <div class="tame-row">
+            <div class="tame-item fade-up d2"><img class="digi" src="/digimon/baby/Botamon.gif"><div class="tame-name">Botamon</div></div>
+            <div class="tame-item fade-up d3"><img class="digi" src="/digimon/baby/Chibomon.gif"><div class="tame-name">Chibomon</div></div>
+            <div class="tame-item fade-up d4"><img class="digi" src="/digimon/baby/Gigimon.gif"><div class="tame-name">Gigimon</div></div>
+            <div class="tame-item fade-up d5"><img class="digi" src="/digimon/baby/Poyomon.gif"><div class="tame-name">Poyomon</div></div>
+            <div class="tame-item fade-up d6"><img class="digi" src="/digimon/baby/Kapurimon.gif"><div class="tame-name">Kapurimon</div></div>
+        </div>
+    </div>
+
+    <!-- 4: FEED -->
+    <div class="scene s-tame" data-dur="3500" id="s4">
+        <div class="t-med fade-up" style="color:#00cc88;">FEED</div>
+        <div class="t-small fade-up d1" style="color:#333;margin-top:6px;">データを与えて成長させろ</div>
+        <div class="t-body fade-up d1" style="margin-top:12px;">Give data to your Digimon. Watch it grow.</div>
+        <div style="margin-top:32px;" class="scale-in d2">
+            <img class="digi" src="/digimon/child/Agumon.gif" style="width:100px;height:100px;">
+        </div>
+        <div class="t-small fade-up d3" style="margin-top:16px;color:#00cc88;">LV.1 &rarr; LV.2 &rarr; LV.3 &rarr; LV.4 &rarr; LV.5</div>
+    </div>
+
+    <!-- 5: EVOLUTION -->
+    <div class="scene s-evo" data-dur="5000" id="s5">
+        <div class="t-med fade-up" style="color:#8833ff;">DIGIVOLVE</div>
+        <div class="t-small fade-up d1" style="color:#333;margin-top:6px;">進化 — 限界を超えろ</div>
+        <div class="t-body fade-up d1" style="margin-top:12px;">Reach Level 5. Evolve into something greater.</div>
+        <div class="evo-chain">
+            <div class="evo-item scale-in d1"><img class="digi" src="/digimon/baby/Botamon.gif"><div class="evo-item-label">BABY</div></div>
+            <div class="evo-arrow scale-in d1">&rarr;</div>
+            <div class="evo-item scale-in d2"><img class="digi" src="/digimon/child/Agumon.gif"><div class="evo-item-label">ROOKIE</div></div>
+            <div class="evo-arrow scale-in d2">&rarr;</div>
+            <div class="evo-item scale-in d3"><img class="digi" src="/digimon/adult/Greymon.gif"><div class="evo-item-label">CHAMPION</div></div>
+            <div class="evo-arrow scale-in d3">&rarr;</div>
+            <div class="evo-item scale-in d4"><img class="digi" src="/digimon/perfect/MetalGreymon.gif"><div class="evo-item-label">ULTIMATE</div></div>
+            <div class="evo-arrow scale-in d4">&rarr;</div>
+            <div class="evo-item scale-in d5"><img class="digi" src="/digimon/ultimate/WarGreymon.gif"><div class="evo-item-label">MEGA</div></div>
+        </div>
+    </div>
+
+    <!-- 6: BATTLE -->
+    <div class="scene s-battle" data-dur="5500" id="s6">
+        <div class="t-med fade-up" style="color:#ff3366;">BATTLE</div>
+        <div class="t-small fade-up d1" style="color:#333;margin-top:6px;margin-bottom:-8px;">バトル — 最強を証明しろ</div>
+        <div class="battle-vs fade-up d1">
+            <div class="battle-side">
+                <img class="digi" src="/digimon/adult/Greymon.gif">
+                <div class="battle-side-name">GREYMON</div>
+                <div class="battle-side-type">Fire &middot; Lv.5</div>
+            </div>
+            <div class="vs-text">VS</div>
+            <div class="battle-side">
+                <img class="digi" src="/digimon/adult/Garurumon.gif">
+                <div class="battle-side-name">GARURUMON</div>
+                <div class="battle-side-type">Ice &middot; Lv.4</div>
+            </div>
+        </div>
+        <div class="battle-log">
+            <div class="battle-log-line">Greymon unleashes a blazing fireball!</div>
+            <div class="battle-log-line">Garurumon blasts a frozen beam... barely a scratch.</div>
+            <div class="battle-log-line">Greymon breathes searing flames. Critical hit.</div>
+            <div class="battle-log-line">Greymon wins. Fire beats Ice.</div>
+        </div>
+    </div>
+
+    <!-- 7: TYPES -->
+    <div class="scene s-types" data-dur="4000" id="s7">
+        <div class="t-med fade-up">14 TYPES</div>
+        <div class="t-small fade-up d1" style="color:#333;margin-top:6px;">属性相性 — 全てが戦略</div>
+        <div class="t-body fade-up d1" style="margin-top:8px;">Every matchup matters.</div>
+        <div class="type-grid" id="typeGrid"></div>
+    </div>
+
+    <!-- 8: SHOWCASE -->
+    <div class="scene s-showcase" data-dur="4000" id="s8">
+        <div class="t-big fade-up">415+</div>
+        <div class="t-small fade-up d1" style="margin-top:8px;">DIGIMON TO DISCOVER</div>
+        <div class="t-small fade-up d2" style="color:#333;margin-top:6px;">全てのデジモンを集めろ</div>
+        <div class="showcase-grid" id="showcaseGrid"></div>
+    </div>
+
+    <!-- 9: AI -->
+    <div class="scene s-ai" data-dur="4000" id="s9">
+        <div class="t-med fade-up" style="color:#8833ff;">POWERED BY OPENCLAW</div>
+        <div class="t-small fade-up d1" style="color:#333;margin-top:6px;">人工知能エンジン</div>
+        <div class="t-body fade-up d1" style="margin-top:8px;">AI engine for digital creature simulation</div>
+        <div class="ai-features">
+            <div class="ai-feat fade-up d2">
+                <div class="ai-feat-title">NLP</div>
+                <div class="ai-feat-desc">Talk naturally. The bot understands.</div>
+            </div>
+            <div class="ai-feat fade-up d3">
+                <div class="ai-feat-title">NARRATIVE</div>
+                <div class="ai-feat-desc">Every battle tells a unique story.</div>
+            </div>
+            <div class="ai-feat fade-up d4">
+                <div class="ai-feat-title">24/7 AGENT</div>
+                <div class="ai-feat-desc">Always online. Always ready.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 10: CTA -->
+    <div class="scene s-cta" data-dur="5000" id="s10">
+        <div class="t-huge fade-up" style="font-size:clamp(40px,8vw,80px);">DGMX</div>
+        <div class="cta-handle fade-up d1">@DIGIMONONX</div>
+        <div class="cta-row">
+            <div class="cta-step fade-up d2"><div class="cta-num">1</div><div class="cta-label">MENTION</div></div>
+            <div class="cta-step fade-up d3"><div class="cta-num">2</div><div class="cta-label">TAME</div></div>
+            <div class="cta-step fade-up d4"><div class="cta-num">3</div><div class="cta-label">PLAY</div></div>
+        </div>
+        <div class="cta-digimon">
+            <div class="scale-in d2"><img class="digi" src="/digimon/ultimate/WarGreymon.gif"></div>
+            <div class="scale-in d3"><img class="digi" src="/digimon/ultimate/Alphamon.gif"></div>
+            <div class="scale-in d4"><img class="digi" src="/digimon/ultimate/Beelzebumon.gif"></div>
+            <div class="scale-in d5"><img class="digi" src="/digimon/ultimate/Apollomon.gif"></div>
+            <div class="scale-in d6"><img class="digi" src="/digimon/ultimate/Chaosmon.gif"></div>
+        </div>
+        <div class="t-small fade-up d5" style="margin-top:32px;">START YOUR JOURNEY NOW</div>
+        <div class="t-small fade-up d6" style="color:#333;margin-top:8px;">冒険を始めよう</div>
+    </div>
+</div>
+
+<audio id="bgm" src="/ost.mp3" preload="auto" loop></audio>
+
+<!-- Click-to-start overlay -->
+<div id="startOverlay" style="position:fixed;inset:0;z-index:200;background:#000;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-direction:column;gap:16px;">
+    <div style="font-family:'Orbitron',sans-serif;font-size:14px;color:#555;letter-spacing:4px;">CLICK TO PLAY</div>
+    <div style="font-size:11px;color:#333;letter-spacing:2px;">クリックして再生</div>
+</div>
+
+<div class="progress-bar" id="progressBar"></div>
+<button class="replay-btn" id="replayBtn" onclick="replay()">REPLAY</button>
+
+<script>
+var scenes = document.querySelectorAll('.scene');
+var progressBar = document.getElementById('progressBar');
+var replayBtn = document.getElementById('replayBtn');
+var current = 0;
+var totalDur = 0;
+var elapsed = 0;
+var timer = null;
+
+// Calculate total duration
+for (var i = 0; i < scenes.length; i++) {
+    totalDur += parseInt(scenes[i].dataset.dur) || 3000;
+}
+
+// Type pills
+(function() {
+    var types = [
+        {n:'FIRE',c:'#F08030'},{n:'WATER',c:'#6890F0'},{n:'NATURE',c:'#78C850'},
+        {n:'ELECTRIC',c:'#C8A800'},{n:'ICE',c:'#7BB8B8'},{n:'EARTH',c:'#C0A058'},
+        {n:'WIND',c:'#6AA4C8'},{n:'MACHINE',c:'#989898'},{n:'LIGHT',c:'#C8A800'},
+        {n:'DARK',c:'#605080'},{n:'VIRUS',c:'#884088'},{n:'DRAGON',c:'#5828C8'},
+        {n:'HOLY DRAGON',c:'#7050D0'},{n:'HOLY BEAST',c:'#8878C0'}
+    ];
+    var grid = document.getElementById('typeGrid');
+    types.forEach(function(t, i) {
+        var d = document.createElement('div');
+        d.className = 'type-pill';
+        d.style.background = t.c;
+        d.style.animationDelay = (0.3 + i * 0.1) + 's';
+        d.textContent = t.n;
+        grid.appendChild(d);
+    });
+})();
+
+// Showcase grid
+(function() {
+    var digis = [
+        'ultimate/WarGreymon','ultimate/Alphamon','ultimate/Beelzebumon',
+        'ultimate/Apollomon','ultimate/Chaosmon','ultimate/Belphemon','ultimate/Anubismon',
+        'perfect/MetalGreymon','perfect/Angewomon','perfect/MachGaogamon',
+        'perfect/Andromon','perfect/Zudomon','perfect/SkullGreymon','perfect/AeroVeedramon',
+        'adult/Greymon','adult/Angemon','adult/Growlmon','adult/Birdramon',
+        'adult/Garurumon','adult/Aquilamon','adult/Airdramon'
+    ];
+    var grid = document.getElementById('showcaseGrid');
+    digis.forEach(function(d, i) {
+        var img = document.createElement('img');
+        img.className = 'digi';
+        img.src = '/digimon/' + d + '.gif';
+        img.style.animationDelay = (0.3 + i * 0.08) + 's';
+        grid.appendChild(img);
+    });
+})();
+
+function showScene(idx) {
+    for (var i = 0; i < scenes.length; i++) {
+        scenes[i].classList.remove('active');
+        // Reset animations by re-triggering reflow
+        var clones = scenes[i].querySelectorAll('.fade-up, .scale-in, .battle-log-line, .type-pill');
+        clones.forEach(function(el) {
+            el.style.animation = 'none';
+            el.offsetHeight; // trigger reflow
+            el.style.animation = '';
+        });
+        // Reset showcase grid images
+        var imgs = scenes[i].querySelectorAll('.showcase-grid img');
+        imgs.forEach(function(el) {
+            el.style.animation = 'none';
+            el.offsetHeight;
+            el.style.animation = '';
+        });
+    }
+    scenes[idx].classList.add('active');
+}
+
+function advance() {
+    var dur = parseInt(scenes[current].dataset.dur) || 3000;
+    elapsed += dur;
+    progressBar.style.width = Math.min(100, (elapsed / totalDur) * 100) + '%';
+
+    current++;
+    if (current >= scenes.length) {
+        replayBtn.classList.add('show');
+        return;
+    }
+    showScene(current);
+    timer = setTimeout(advance, parseInt(scenes[current].dataset.dur) || 3000);
+}
+
+var bgm = document.getElementById('bgm');
+var overlay = document.getElementById('startOverlay');
+
+function start() {
+    current = 0;
+    elapsed = 0;
+    replayBtn.classList.remove('show');
+    progressBar.style.width = '0%';
+    showScene(0);
+    timer = setTimeout(advance, parseInt(scenes[0].dataset.dur) || 1500);
+}
+
+function replay() {
+    clearTimeout(timer);
+    bgm.currentTime = 0;
+    bgm.play();
+    start();
+}
+
+// Wait for click to start (browsers require user interaction for audio)
+overlay.addEventListener('click', function() {
+    overlay.style.transition = 'opacity 0.5s';
+    overlay.style.opacity = '0';
+    setTimeout(function() { overlay.style.display = 'none'; }, 500);
+    bgm.volume = 0.7;
+    bgm.currentTime = 0;
+    bgm.play();
+    start();
+});
+</script>
+
+</body>
+</html>

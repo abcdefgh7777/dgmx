@@ -564,7 +564,7 @@
         <div class="system-footer" style="text-align:center; padding:20px;">
             <div id="footer-icons" style="display:flex; justify-content:center; gap:12px; margin-bottom:12px; flex-wrap:wrap;"></div>
             <div style="font-family:'Pixel Digivolve','PixelMplus12',monospace; font-size:11px; letter-spacing:1px;">
-                COPYRIGHT DGMX 2026 pump.fun
+                COPYRIGHT DGMX 2026
             </div>
             <div style="font-family:'Pixel Digivolve','PixelMplus12',monospace; font-size:9px; margin-top:6px; opacity:0.6;">
                 <%= pets ? pets.length : 0 %> DIGITAL PARTNERS REGISTERED | SYSTEM ONLINE
@@ -660,7 +660,8 @@
 
         function timeAgo(ts) {
             if (!ts) return '?';
-            var secs = Math.floor((Date.now() - new Date(ts).getTime()) / 1000);
+            var t = typeof ts === 'number' && ts < 1e12 ? ts * 1000 : ts;
+            var secs = Math.floor((Date.now() - new Date(t).getTime()) / 1000);
             if (secs < 0) secs = 0;
             if (secs < 60) return secs + 's';
             if (secs < 3600) return Math.floor(secs / 60) + 'm';

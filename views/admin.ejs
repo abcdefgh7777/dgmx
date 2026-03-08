@@ -414,6 +414,7 @@
                     <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
                         <button onclick="startAgent()" class="btn-primary" style="font-size:9px;">START AGENT</button>
                         <button onclick="stopAgent()" class="btn-danger" style="font-size:9px;">STOP AGENT</button>
+                        <button onclick="pollNow()" class="btn-primary" style="font-size:9px;background:#ff6600;">CHECK NOW</button>
                         <button onclick="refreshAgentStatus()" class="btn-secondary" style="font-size:9px;">REFRESH</button>
                         <button onclick="clearReplies()" class="btn-secondary" style="font-size:9px;">CLEAR LOGS</button>
                         <button onclick="clearFailed()" class="btn-secondary" style="font-size:9px;">RETRY FAILED</button>
@@ -1510,6 +1511,19 @@
             } catch (e) { alert('Error: ' + e.message); }
         }
 
+        async function pollNow() {
+            try {
+                const res = await fetch('/api/admin/agent/poll-now', { method: 'POST' });
+                const data = await res.json();
+                if (data.ok) {
+                    // Wait a few seconds for it to process, then refresh
+                    setTimeout(() => { loadRecentReplies(); refreshAgentStatus(); }, 4000);
+                } else {
+                    alert(data.error);
+                }
+            } catch (e) { alert('Error: ' + e.message); }
+        }
+
         async function clearReplies() {
             if (!confirm('Clear all reply logs?')) return;
             try {
@@ -1585,7 +1599,8 @@
                 }
 
                 container.innerHTML = data.replies.map(r => {
-                    const time = r.created_at ? new Date(r.created_at).toLocaleString() : '?';
+                    const ts = r.created_at && r.created_at < 1e12 ? r.created_at * 1000 : r.created_at;
+                    const time = ts ? new Date(ts).toLocaleString() : '?';
                     const status = r.status === 'replied' ? '<span style="color:#48A058;">OK</span>' : '<span style="color:#B3181C;">' + (r.status || 'pending') + '</span>';
                     return '<div style="border-bottom:1px solid #222; padding:6px 0;">' +
                         '<div style="color:#F0B088;">@' + (r.author_username || '?') + ' ' + status + ' <span style="color:#555;">' + time + '</span></div>' +

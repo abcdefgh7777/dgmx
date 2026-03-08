@@ -42,7 +42,13 @@
       "Bash(MSYS_NO_PATHCONV=1 railway volume:*)",
       "Bash(railway variable:*)",
       "Bash(railway up:*)",
-      "Bash(railway logs:*)"
+      "Bash(railway logs:*)",
+      "Bash(railway domain:*)",
+      "WebFetch(domain:dgmx-app-production.up.railway.app)",
+      "Bash(lsof -ti:5000)",
+      "Bash(xargs kill -9)",
+      "Bash(xargs -I{} taskkill //F //PID {})",
+      "Bash(shuf:*)"
     ],
     "deny": [],
     "ask": []

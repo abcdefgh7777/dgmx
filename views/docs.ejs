@@ -3,689 +3,1114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digimon X Documentation - Digital Monster Collection Guide</title>
+    <title>DGMX - Documentation | Digital Monster On X</title>
     <link rel="icon" type="image/png" href="/fav.png">
-    <!-- Digivice Theme CSS -->
     <link rel="stylesheet" href="/digivice-theme.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            background: var(--bg-primary);
-            color: var(--digivice-cyan);
+            background: #0a0e1a;
+            color: #e0e6f0;
             font-family: 'Share Tech Mono', 'Courier New', monospace;
             font-size: 14px;
-            line-height: 1.6;
+            line-height: 1.7;
             min-height: 100vh;
-            padding: 1rem;
+        }
+
+        /* ── Hero ── */
+        .hero {
+            background: linear-gradient(135deg, #0d1117 0%, #161b28 50%, #0d1117 100%);
+            border-bottom: 2px solid #ff6600;
+            padding: 28px 20px 32px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(255,102,0,0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero-title {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(24px, 4vw, 36px);
+            font-weight: 900;
+            background: linear-gradient(90deg, #ff6600, #ffcc00, #ff6600);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 4px;
+        }
+        .hero-sub {
+            color: #00ccff;
+            font-family: 'Orbitron', monospace;
+            font-size: 13px;
+            margin-top: 8px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        .hero-tagline {
+            color: #8899aa;
+            margin-top: 16px;
+            font-size: 14px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .hero-digimon {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            margin-top: 28px;
+            flex-wrap: wrap;
+        }
+        .hero-digimon img {
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
             image-rendering: pixelated;
-            font-smooth: never;
-            -webkit-font-smoothing: none;
-            overflow-x: auto;
+            filter: drop-shadow(0 0 8px rgba(255,102,0,0.4));
+            animation: float 3s ease-in-out infinite;
         }
-        
-        .terminal-container {
-            max-width: 1000px;
+        .hero-digimon img:nth-child(2) { animation-delay: 0.5s; }
+        .hero-digimon img:nth-child(3) { animation-delay: 1s; }
+        .hero-digimon img:nth-child(4) { animation-delay: 1.5s; }
+        .hero-digimon img:nth-child(5) { animation-delay: 2s; }
+        @keyframes float {
+            0%,100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* ── Nav ── */
+        .docs-nav {
+            background: #0d1117;
+            border-bottom: 1px solid #1e2a3a;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .docs-nav a {
+            color: #8899aa;
+            text-decoration: none;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 6px 14px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            font-family: 'Orbitron', monospace;
+        }
+        .docs-nav a:hover, .docs-nav a.active {
+            color: #ff6600;
+            background: rgba(255,102,0,0.1);
+        }
+        .docs-nav .nav-home {
+            color: #00ccff;
+            border: 1px solid #00ccff33;
+        }
+        .docs-nav .nav-home:hover {
+            background: rgba(0,204,255,0.1);
+            color: #00ccff;
+        }
+
+        /* ── Container ── */
+        .docs-container {
+            max-width: 900px;
             margin: 0 auto;
+            padding: 30px 20px 80px;
         }
-        
-        .nav-terminal {
-            padding: 15px;
+
+        /* ── Section ── */
+        .doc-section {
+            margin-bottom: 48px;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
             margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #1e2a3a;
         }
-        
-        .nav-links {
+        .section-num {
+            background: #ff6600;
+            color: #fff;
+            font-family: 'Orbitron', monospace;
+            font-size: 12px;
+            font-weight: 700;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            flex-shrink: 0;
+        }
+        .section-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 18px;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .section-text {
+            color: #8899aa;
+            margin-bottom: 16px;
+            font-size: 13px;
+        }
+
+        /* ── Cards ── */
+        .info-card {
+            background: #111827;
+            border: 1px solid #1e2a3a;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+        .info-card.orange::before { background: linear-gradient(90deg, #ff6600, #ffcc00); }
+        .info-card.cyan::before { background: linear-gradient(90deg, #00ccff, #0088ff); }
+        .info-card.green::before { background: linear-gradient(90deg, #00ff88, #00cc66); }
+        .info-card.red::before { background: linear-gradient(90deg, #ff3366, #ff6644); }
+        .info-card.purple::before { background: linear-gradient(90deg, #8833ff, #cc44ff); }
+
+        .card-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 13px;
+            color: #ff6600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+        .info-card.cyan .card-title { color: #00ccff; }
+        .info-card.green .card-title { color: #00ff88; }
+        .info-card.red .card-title { color: #ff3366; }
+        .info-card.purple .card-title { color: #8833ff; }
+
+        .card-text { color: #8899aa; font-size: 13px; line-height: 1.8; }
+        .card-text strong { color: #e0e6f0; }
+        .card-text code {
+            background: #1a2332;
+            color: #ffcc00;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        /* ── Command blocks ── */
+        .cmd-block {
+            background: #0d1117;
+            border: 1px solid #1e2a3a;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+        .cmd-header {
+            background: #161b28;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #1e2a3a;
+        }
+        .cmd-name {
+            font-family: 'Orbitron', monospace;
+            font-size: 13px;
+            color: #ffcc00;
+            font-weight: 700;
+        }
+        .cmd-tag {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .cmd-tag.core { background: #ff660033; color: #ff6600; }
+        .cmd-tag.social { background: #00ccff33; color: #00ccff; }
+        .cmd-tag.combat { background: #ff336633; color: #ff3366; }
+        .cmd-body {
+            padding: 14px 16px;
+            color: #8899aa;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+        .cmd-body strong { color: #e0e6f0; }
+        .cmd-example {
+            background: #0a0e1a;
+            border: 1px solid #1e2a3a;
+            border-radius: 6px;
+            padding: 10px 14px;
+            margin-top: 10px;
+            color: #00ccff;
+            font-size: 12px;
+        }
+        .cmd-example::before {
+            content: 'EXAMPLE ';
+            color: #334455;
+            font-size: 10px;
+            letter-spacing: 1px;
+        }
+
+        /* ── Evolution showcase ── */
+        .evo-chain {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding: 24px 16px;
+            background: #0d1117;
+            border: 1px solid #1e2a3a;
+            border-radius: 10px;
+            margin: 16px 0;
+        }
+        .evo-stage {
+            text-align: center;
+            min-width: 100px;
+        }
+        .evo-stage img {
+            width: 56px;
+            height: 56px;
+            object-fit: contain;
+            image-rendering: pixelated;
+            filter: drop-shadow(0 0 6px rgba(0,204,255,0.3));
+            margin-bottom: 6px;
+        }
+        .evo-label {
+            font-family: 'Orbitron', monospace;
+            font-size: 9px;
+            color: #ff6600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .evo-name {
+            color: #e0e6f0;
+            font-size: 11px;
+            margin-top: 2px;
+        }
+        .evo-arrow {
+            color: #334455;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        /* ── Type grid ── */
+        .type-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 8px;
+            margin: 16px 0;
+        }
+        .type-chip {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        /* ── Digimon showcase row ── */
+        .digi-showcase {
             display: flex;
             gap: 20px;
-            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
         }
-        
-        .nav-link {
-            color: var(--digivice-white);
-            text-decoration: none;
-            padding: 8px 15px;
-            background: var(--digivice-orange);
-            text-transform: uppercase;
-            font-family: 'Orbitron', monospace;
-            border: none;
-            margin: 0 5px;
-            display: inline-block;
-            box-shadow: -2px -2px 0 #2a5930 inset, 2px 2px 0 #6ac77a inset;
-        }
-        
-        .nav-link:hover {
-            background: #6ac77a;
-            transform: scale(1.05);
-        }
-        
-        .terminal-title {
-            color: var(--digivice-cyan);
-            font-size: 14px;
-            text-transform: uppercase;
-            font-family: 'Orbitron', monospace;
-        }
-        
-        .prompt::before {
-            content: '$ ';
-            color: #ffffff;
-        }
-        
-        .doc-header {
-            padding: 20px;
-            margin-bottom: 30px;
+        .digi-card {
             text-align: center;
+            background: #111827;
+            border: 1px solid #1e2a3a;
+            border-radius: 10px;
+            padding: 16px;
+            width: 120px;
         }
-        
-        .doc-section {
-            margin-bottom: 20px;
-            padding: 20px;
+        .digi-card img {
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
+            image-rendering: pixelated;
+            filter: drop-shadow(0 0 6px rgba(0,204,255,0.3));
         }
-        
-        .section-title {
-            color: var(--digivice-orange);
-            font-size: 16px;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-            border-bottom: 1px solid var(--digivice-orange);
-            padding-bottom: 10px;
+        .digi-card .digi-name {
+            color: #e0e6f0;
+            font-size: 11px;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+        .digi-card .digi-stage {
+            color: #ff6600;
+            font-size: 9px;
             font-family: 'Orbitron', monospace;
-        }
-        
-        .command {
-            background: var(--bg-card);
-            padding: 15px;
-            margin: 10px 0;
-            border: 1px solid var(--digivice-cyan);
-            border-radius: 8px;
-            font-family: 'Share Tech Mono', monospace;
             text-transform: uppercase;
+            margin-top: 4px;
         }
-        
-        .command-name {
-            color: var(--digivice-orange);
-            font-weight: bold;
+
+        /* ── Step flow ── */
+        .step-flow {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin: 16px 0;
+        }
+        .step-item {
+            flex: 1;
+            min-width: 200px;
+            background: #111827;
+            border: 1px solid #1e2a3a;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        .step-num {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #ff6600, #ffcc00);
+            color: #000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            font-size: 16px;
+            margin: 0 auto 12px;
+        }
+        .step-title {
+            color: #ffffff;
+            font-family: 'Orbitron', monospace;
+            font-size: 12px;
             text-transform: uppercase;
-            font-size: 14px;
+            letter-spacing: 1px;
             margin-bottom: 8px;
         }
-        
-        .warning {
-            background: var(--bg-card);
-            border: 1px solid var(--digivice-red);
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
-            color: var(--digivice-red);
+        .step-desc { color: #8899aa; font-size: 12px; }
+
+        /* ── Table ── */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 13px;
+        }
+        .data-table th {
+            background: #161b28;
+            color: #ff6600;
+            font-family: 'Orbitron', monospace;
+            font-size: 11px;
             text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 10px 14px;
+            text-align: left;
+            border-bottom: 2px solid #ff660044;
         }
-        
-        .info {
-            background: var(--bg-card);
-            border: 1px solid var(--digivice-green);
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
-            color: var(--digivice-green);
-            text-transform: uppercase;
+        .data-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #1e2a3a;
+            color: #8899aa;
         }
-        
-        .success {
-            background: var(--bg-card);
-            border: 1px solid var(--digivice-green);
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
-            color: var(--digivice-green);
-            text-transform: uppercase;
-        }
-        
-        .code-block {
-            background: var(--bg-terminal);
-            border: 1px solid var(--digivice-cyan);
-            border-radius: 8px;
-            padding: 15px;
-            margin: 10px 0;
-            overflow-x: auto;
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 12px;
-            color: var(--digivice-cyan);
-        }
-        
-        .toc {
-            background: var(--bg-card);
-            border: 1px solid var(--digivice-orange);
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .toc ul {
-            list-style: none;
-            padding-left: 20px;
-        }
-        
-        .toc a {
-            color: var(--digivice-cyan);
-            text-decoration: none;
-            text-transform: uppercase;
+        .data-table tr:hover td { background: #111827; }
+        .data-table td code {
+            background: #1a2332;
+            color: #ffcc00;
+            padding: 2px 6px;
+            border-radius: 3px;
             font-size: 12px;
         }
-        
-        .toc a:hover {
-            color: var(--digivice-orange);
+
+        /* ── Badge / highlight ── */
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
         }
-        
-        .ascii-art {
-            color: var(--digivice-green);
+        .badge-orange { background: #ff660022; color: #ff6600; border: 1px solid #ff660044; }
+        .badge-cyan { background: #00ccff22; color: #00ccff; border: 1px solid #00ccff44; }
+        .badge-green { background: #00ff8822; color: #00ff88; border: 1px solid #00ff8844; }
+
+        /* ── OpenClaw section ── */
+        .openclaw-banner {
+            background: linear-gradient(135deg, #0d1117, #1a1040, #0d1117);
+            border: 1px solid #8833ff44;
+            border-radius: 12px;
+            padding: 30px;
             text-align: center;
-            font-size: 12px;
-            line-height: 1.4;
             margin: 20px 0;
-            font-family: 'Share Tech Mono', monospace;
+            position: relative;
+            overflow: hidden;
         }
-        
-        .highlight {
-            color: var(--digivice-red);
-            font-weight: bold;
-            text-transform: uppercase;
+        .openclaw-banner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(136,51,255,0.1) 0%, transparent 70%);
+            pointer-events: none;
         }
-        
-        .x-handle {
-            color: var(--digivice-orange);
+        .openclaw-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 20px;
+            color: #cc44ff;
+            letter-spacing: 3px;
+            margin-bottom: 12px;
+        }
+        .openclaw-text {
+            color: #8899aa;
+            font-size: 13px;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* ── Footer ── */
+        .docs-footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid #1e2a3a;
+            margin-top: 40px;
+        }
+        .docs-footer a {
+            color: #ff6600;
             text-decoration: none;
-            text-transform: uppercase;
         }
-        
-        .x-handle:hover {
-            color: var(--digivice-yellow);
+        .docs-footer a:hover { color: #ffcc00; }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .evo-chain { gap: 4px; }
+            .evo-stage { min-width: 70px; }
+            .evo-stage img { width: 40px; height: 40px; }
+            .step-flow { flex-direction: column; }
+            .type-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
         }
     </style>
 </head>
 <body>
-    <div class="digivice-container">
-        <!-- Digivice Navigation -->
-        <div class="digivice-nav">
-            <div class="nav-content">
-                <div class="digivice-logo">DIGIMON X</div>
-                <div class="nav-buttons">
-                    <a href="/" class="digivice-btn primary">SCANNER</a>
-                    <a href="https://x.com/digimononx" target="_blank" class="digivice-btn">X</a>
-                    <a href="javascript:location.reload()" class="digivice-btn">SYNC</a>
+
+<!-- ══════════ HERO ══════════ -->
+<div class="hero">
+    <div class="hero-title">DGMX DOCS</div>
+    <div class="hero-sub">Digital Monster On X</div>
+    <div class="hero-tagline">
+        Tame, train, digivolve, and battle Digimon directly on X (Twitter).
+        Powered by OpenClaw AI engine.
+    </div>
+    <div class="hero-digimon">
+        <img src="/digimon/baby/Botamon.gif" alt="Botamon">
+        <img src="/digimon/child/Agumon.gif" alt="Agumon">
+        <img src="/digimon/adult/Growlmon.gif" alt="Growlmon">
+        <img src="/digimon/perfect/MachGaogamon.gif" alt="MachGaogamon">
+        <img src="/digimon/ultimate/Alphamon.gif" alt="Alphamon">
+    </div>
+</div>
+
+<!-- ══════════ NAV ══════════ -->
+<nav class="docs-nav">
+    <a href="/" class="nav-home">Home</a>
+    <a href="#quick-start">Start</a>
+    <a href="#commands">Commands</a>
+    <a href="#evolution">Evolution</a>
+    <a href="#battle">Battle</a>
+    <a href="#types">Types</a>
+    <a href="#openclaw">OpenClaw</a>
+    <a href="https://x.com/digimononx" target="_blank">X</a>
+</nav>
+
+<!-- ══════════ CONTENT ══════════ -->
+<div class="docs-container">
+
+    <!-- ── 1. QUICK START ── -->
+    <div class="doc-section" id="quick-start">
+        <div class="section-header">
+            <div class="section-num">1</div>
+            <div class="section-title">Quick Start</div>
+        </div>
+        <p class="section-text">
+            Become a Digimon Tamer in 3 simple steps. Everything happens on X (Twitter) &mdash;
+            just mention <a href="https://x.com/digimononx" style="color:#ff6600;text-decoration:none;">@digimononx</a> and start playing.
+        </p>
+
+        <div class="step-flow">
+            <div class="step-item">
+                <div class="step-num">1</div>
+                <img src="/digimon/baby/Chibomon.gif" alt="" style="width:48px;height:48px;image-rendering:pixelated;margin-bottom:8px;filter:drop-shadow(0 0 6px rgba(0,204,255,0.3));">
+                <div class="step-title">Mention Us</div>
+                <div class="step-desc">
+                    Tweet <code style="background:#1a2332;color:#ffcc00;padding:2px 6px;border-radius:3px;">@digimononx tame</code> to hatch your first Digi-Egg
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-num">2</div>
+                <img src="/digimon/child/Agumon.gif" alt="" style="width:48px;height:48px;image-rendering:pixelated;margin-bottom:8px;filter:drop-shadow(0 0 6px rgba(0,204,255,0.3));">
+                <div class="step-title">Train & Feed</div>
+                <div class="step-desc">
+                    Use <code style="background:#1a2332;color:#ffcc00;padding:2px 6px;border-radius:3px;">feed</code> to give data to your Digimon and level up
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-num">3</div>
+                <img src="/digimon/adult/Growlmon.gif" alt="" style="width:48px;height:48px;image-rendering:pixelated;margin-bottom:8px;filter:drop-shadow(0 0 6px rgba(0,204,255,0.3));">
+                <div class="step-title">Digivolve & Battle</div>
+                <div class="step-desc">
+                    Reach Lv.5 to <code style="background:#1a2332;color:#ffcc00;padding:2px 6px;border-radius:3px;">digivolve</code>, then <code style="background:#1a2332;color:#ffcc00;padding:2px 6px;border-radius:3px;">battle</code> other tamers
                 </div>
             </div>
         </div>
 
-        <!-- Database Header -->
-        <div class="digivice-screen digivice-header">
-            <div class="terminal-prompt">digimon-x --access-database</div>
-            <div class="system-title">TAMER DATABASE</div>
-            <div class="system-subtitle">Digital World Operations Manual v2.0</div>
-            <pre class="ascii-art" style="color: var(--digivice-cyan); font-size: 12px;">
-██████╗ ██╗ ██████╗ ██╗███╗   ███╗ ██████╗ ███╗   ██╗    ██╗  ██╗
-██╔══██╗██║██╔════╝ ██║████╗ ████║██╔═══██╗████╗  ██║    ╚██╗██╔╝
-██║  ██║██║██║  ███╗██║██╔████╔██║██║   ██║██╔██╗ ██║     ╚███╔╝ 
-██║  ██║██║██║   ██║██║██║╚██╔╝██║██║   ██║██║╚██╗██║     ██╔██╗ 
-██████╔╝██║╚██████╔╝██║██║ ╚═╝ ██║╚██████╔╝██║ ╚████║    ██╔╝ ██╗
-╚═════╝ ╚═╝ ╚═════╝ ╚═╝╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═══╝    ╚═╝  ╚═╝
-            </pre>
-            <div style="color: var(--digivice-green); margin-top: 15px; text-transform: uppercase; font-size: 12px;">
-                OFFICIAL TAMER DATABASE v2.0 | DIGITAL MONSTERS ARE THE CHAMPIONS!
-            </div>
-        </div>
-
-        <!-- Table of Contents -->
-        <div class="toc framed no-hd">
-            <div class="section-title">Table of Contents</div>
-            <ul>
-                <li><a href="#quick-start">1. Quick Start Guide</a></li>
-                <li><a href="#catching">2. Digimon Capture System</a></li>
-                <li><a href="#commands">3. Command Reference</a></li>
-                <li><a href="#ai-system">4. AI Digimon Generation</a></li>
-                <li><a href="#digimon-care">5. Digimon Care & Training</a></li>
-                <li><a href="#growth-system">6. Evolution System</a></li>
-                <li><a href="#social-features">7. Trainer Community</a></li>
-                <li><a href="#technical">8. Technical Specifications</a></li>
-                <li><a href="#api">9. API Documentation</a></li>
-                <li><a href="#troubleshooting">10. Troubleshooting</a></li>
-                <li><a href="#community">11. Trainer Guidelines</a></li>
-                <li><a href="#changelog">12. Version History</a></li>
-            </ul>
-        </div>
-
-        <!-- Quick Start -->
-        <div class="doc-section framed neutral" id="quick-start">
-            <div class="section-title">1. Quick Start Guide</div>
-            <p>Welcome to Digimon X, the ultimate Digital Monster collection and farming simulator powered by AI!</p>
-            
-            <div class="info">
-                <strong>First Time Trainer?</strong><br>
-                Follow these 3 simple steps to become a Digimon Tamer!
-            </div>
-
-            <div class="command">
-                <div class="command-name">Step 1: Social Verification</div>
-                Visit our official X: <a href="https://x.com/digimononx" class="x-handle">@digimononx</a><br>
-                Mention us to verify your Trainer account.
-            </div>
-
-            <div class="command">
-                <div class="command-name">Step 2: Capture Your First Digimon</div>
-                Use the <span class="highlight">/tamer</span> command to capture your first Digimon.<br>
-                Each tamer can have up to <span class="highlight">THREE</span> Digimon in their party.
-            </div>
-
-            <div class="command">
-                <div class="command-name">Step 3: Train and Battle</div>
-                Check your Digimon with <span class="highlight">/digivice</span><br>
-                Farm with other tamers using <span class="highlight">/farm</span>!
-            </div>
-        </div>
-
-        <!-- Digimon Capture -->
-        <div class="doc-section framed neutral" id="catching">
-            <div class="section-title">2. Digimon Capture System</div>
-            
-            <p>Become a Digimon Tamer by capturing and training up to 3 Digimon!</p>
-
-            <div class="warning">
-                <strong>Digimon Limits</strong><br>
-                • Maximum 3 Digimon per tamer<br>
-                • Each capture attempt uses AI generation<br>
-                • Digimon have unique stats and personalities<br>
-                • Rare Digimon have special abilities
-            </div>
-
-            <div class="success">
-                <strong>Catch Requirements</strong><br>
-                1. Valid X (Twitter) account linked<br>
-                2. Mention @PokettFun for verification<br>
-                3. Available Digimon slots (max 3)<br>
-                4. Ready to train and farm!
-            </div>
-
-            <div class="code-block">
-                <div class="prompt">digimon-x --tamer</div>
-                <pre>
-> Wild Digimon appeared!
-> Entering Digital World...
-> Generating Digimon stats...
-> Success! Agumon was captured!
-> Level: 5 | Type: Fire
-> Added to your party (1/3)
-                </pre>
-            </div>
-        </div>
-
-        <!-- Commands -->
-        <div class="doc-section framed neutral" id="commands">
-            <div class="section-title">3. Command Reference</div>
-            
-            <p>Digimon X features comprehensive Digimon commands powered by AI generation.</p>
-
-            <div class="command">
-                <div class="command-name">/tamer</div>
-                <strong>Purpose:</strong> Capture a wild Digimon for your party<br>
-                <strong>Usage:</strong> <code>/tamer @your_x_handle</code><br>
-                <strong>Cooldown:</strong> Success or failure determines next capture<br>
-                <strong>Requirements:</strong> Available party slot (max 3)
-            </div>
-
-            <div class="command">
-                <div class="command-name">/digivice</div>
-                <strong>Purpose:</strong> Check your Digimon party status<br>
-                <strong>Usage:</strong> <code>/digivice</code><br>
-                <strong>Cooldown:</strong> None<br>
-                <strong>Returns:</strong> All your Digimon stats and levels
-            </div>
-
-            <div class="command">
-                <div class="command-name">/farm</div>
-                <strong>Purpose:</strong> Farm with other tamers and your Digimon<br>
-                <strong>Usage:</strong> <code>/farm</code><br>
-                <strong>Cooldown:</strong> 5 minutes between farming<br>
-                <strong>Rewards:</strong> XP, levels, rare items
-            </div>
-
-            <div class="info">
-                <strong>PLANNED COMMANDS (Coming Soon)</strong><br>
-                • /trade - Trade Digimon with other tamers<br>
-                • /gym - Challenge Gym Leaders<br>
-                • /tournament - Enter Digimon tournaments<br>
-                • /digivolve - Digivolve your Digimon<br>
-                • /team - Create farming teams
-            </div>
-        </div>
-
-        <!-- AI System -->
-        <div class="doc-section framed neutral" id="ai-system">
-            <div class="section-title">4. AI Digimon Generation</div>
-            
-            <p>Digimon X uses <span class="highlight">Advanced AI</span> to generate unique Digimon with individual stats, types, and abilities.</p>
-
-            <div class="success">
-                <strong>DIGIMON GENERATION SYSTEM</strong><br>
-                Each Digimon is unique with:<br>
-                • Randomized stats and IVs<br>
-                • Type advantages and weaknesses<br>
-                • Special moves and abilities<br>
-                • Evolution potential<br>
-                • Rare Digimon chances (1/100)
-            </div>
-
-            <div class="code-block">
-                <div class="prompt">digimon-x --digimon-stats greymon</div>
-                <pre>
-> CHARIZARD - Fire/Flying Type
-> Level: 36 | HP: 120/120
-> Attack: 84 | Defense: 78 
-> Sp.Atk: 109 | Sp.Def: 85
-> Speed: 100
-> Moves: Flamethrower, Dragon Claw, Air Slash, Heat Wave
-> Ability: Blaze
-                </pre>
-            </div>
-
-            <div class="warning">
-                <strong>AI GENERATION FEATURES</strong><br>
-                Every capture attempt generates a completely unique Digimon with balanced stats for fair gameplay!
-            </div>
-
-            <div class="info">
-                <strong>DIGIMON RARITY TIERS</strong><br>
-                Common (60%) | Uncommon (25%) | Rare (10%) | Epic (4%) | Legendary (1%)
-            </div>
-        </div>
-
-        <!-- Digimon Care -->
-        <div class="doc-section framed neutral" id="digimon-care">
-            <div class="section-title">5. Digimon Care & Training</div>
-            
-            <p>Train your Digimon to increase their stats and prepare for farming!</p>
-
-            <div class="command">
-                <div class="command-name">Training Mechanics</div>
-                • <strong>Feed System:</strong> 60-minute cooldown between feeds<br>
-                • <strong>Berry Types:</strong> Different berries boost different stats<br>
-                • <strong>Growth Stages:</strong> Baby → Teen → Adult<br>
-                • <strong>Farm Ready:</strong> Higher level = more efficient farming
-            </div>
-
-            <div class="code-block">
-                <div class="prompt">digimon-x --feed agumon --food=meat</div>
-                <pre>
-> Feeding Pikachu with Sitrus Berry...
-> HP restored to full!
-> Happiness increased!
-> Growth: Baby → Teen (3/6 feeds)
-> Next feeding in: 59 minutes
-                </pre>
-            </div>
-
-            <div class="success">
-                <strong>TRAINING EVENTS</strong><br>
-                Special events for trainers:<br>
-                • Double XP weekends<br>
-                • Legendary Digimon appearances<br>
-                • Community day events<br>
-                • Rare Digimon increased rates
-            </div>
-        </div>
-
-        <!-- Growth System -->
-        <div class="doc-section framed neutral" id="growth-system">
-            <div class="section-title">6. Evolution System</div>
-            
-            <p>Digimon digivolve through feeding and battling, unlocking new forms and abilities!</p>
-
-            <div class="info">
-                <strong>GROWTH STAGES</strong><br>
-                <strong>Baby (0-2 feeds):</strong> Starting stats, learning moves<br>
-                <strong>Teen (3-5 feeds):</strong> Stat boosts, new abilities<br>
-                <strong>Adult (6+ feeds):</strong> Full power, evolution ready<br>
-                <strong>Champion (10+ wins):</strong> Elite stats, rare moves<br>
-                <strong>Master (50+ wins):</strong> Legendary status
-            </div>
-
-            <div class="warning">
-                <strong>EVOLUTION TRIGGERS</strong><br>
-                Digimon digivolve based on:<br>
-                • Feed count milestones<br>
-                • Battle victories<br>
-                • Level thresholds<br>
-                • Special items (coming soon)
-            </div>
-
-            <div class="code-block">
-                <div class="prompt">digimon-x --digivolution greymon</div>
-                <pre>
-> CHARMELEON Evolution Status:
-> Current Level: 35
-> Evolution: CHARIZARD at Level 36
-> Progress: 95% Complete
-> 
-> Stats Preview after evolution:
-> HP: 78 → 120 (+42)
-> Attack: 64 → 84 (+20)
-> New Type: Fire/Flying
-> New Move: Air Slash
-                </pre>
-            </div>
-        </div>
-
-        <!-- Social Features -->
-        <div class="doc-section framed neutral" id="social-features">
-            <div class="section-title">7. Trainer Community</div>
-            
-            <p>Join the Digimon X tamer community and compete for the top spots!</p>
-
-            <div class="success">
-                <strong>SOCIAL FEATURES</strong><br>
-                • Auto-share Digimon captures to X<br>
-                • Trainer leaderboards<br>
-                • Battle tournaments<br>
-                • Digimon trading (coming soon)<br>
-                • Team farming (coming soon)
-            </div>
-
-            <div class="command">
-                <div class="command-name">Community Events</div>
-                <strong>Weekly Tournaments:</strong> Battle for rare Digimon<br>
-                <strong>Legendary Raids:</strong> Team up to capture legendaries<br>
-                <strong>Trading Days:</strong> Exchange Digimon with others<br>
-                <strong>Shiny Hunts:</strong> Increased shiny rates
-            </div>
-
-            <div class="info">
-                <strong>LEADERBOARDS</strong><br>
-                • Top Tamers: Most farming success<br>
-                • Digimon Masters: Most Digimon captured<br>
-                • Battle Champions: Highest win streaks<br>
-                • Rare Collectors: Most rare Digimon<br>
-                • Elite Four: Top 4 trainers globally
-            </div>
-        </div>
-
-        <!-- Technical -->
-        <div class="doc-section framed neutral" id="technical">
-            <div class="section-title">8. Technical Specifications</div>
-            
-            <p>Digimon X runs on modern infrastructure for the best Digimon experience.</p>
-
-            <div class="code-block">
-                <div class="prompt">digimon-x --system-info</div>
-                <pre>
-> Digimon X System v1.0.0
->
-> Backend: Node.js + Express.js
-> Database: SQLite3
-> AI Engine: Advanced Digimon Generation
-> Frontend: Digimon Digital Theme
-> Authentication: X (Twitter) OAuth
-> Hosting: High-performance servers
-> Updates: Real-time farming system
-> Features: Auto-feeding, Evolution tracking
-                </pre>
-            </div>
-
-            <div class="warning">
-                <strong>🔒 SECURITY MEASURES</strong><br>
-                • Military-grade encryption for all user data<br>
-                • Regular security audits by third-party firms<br>
-                • GDPR and CCPA compliant data handling<br>
-                • No personal data sold or shared with advertisers<br>
-                • Open-source security modules for transparency
-            </div>
-
-            <div class="success">
-                <strong>⚡ PERFORMANCE METRICS</strong><br>
-                • Average response time: <200ms globally<br>
-                • 99.9% uptime guarantee with SLA<br>
-                • Supports 100,000+ concurrent users<br>
-                • Auto-scaling infrastructure handles traffic spikes<br>
-                • CDN distribution across 50+ global regions
-            </div>
-        </div>
-
-        <!-- API -->
-        <div class="doc-section" id="api">
-            <div class="section-title">🔌 9. Developer API Documentation</div>
-            
-            <div class="warning">
-                <strong>📝 NOTE: API NOT AVAILABLE YET</strong><br>
-                The developer API is currently under development and not available during early access.<br>
-                We are working hard to provide comprehensive API endpoints for the community.<br>
-                Expected release: Q2 2025 with full documentation and developer tools.
-            </div>
-
-            <p>Digimon X will provide comprehensive APIs for developers building integrations, bots, and third-party applications once we exit early access phase.</p>
-
-            <div class="info">
-                <strong>🚧 PLANNED API FEATURES</strong><br>
-                • Pet information retrieval endpoints<br>
-                • Authenticated feeding and care actions<br>
-                • Real-time WebSocket connections<br>
-                • Social media integration tools<br>
-                • Community event participation<br>
-                • Leaderboard and statistics access
-            </div>
-
-            <div class="success">
-                <strong>🔔 GET NOTIFIED</strong><br>
-                Join our Discord or follow @PokettFun on X to be notified when the API becomes available.<br>
-                Early access developers will receive priority access to beta API endpoints.
-            </div>
-        </div>
-
-        <!-- Troubleshooting -->
-        <div class="doc-section" id="troubleshooting">
-            <div class="section-title">🔧 10. Troubleshooting & Support</div>
-            
-            <div class="warning">
-                <strong>❌ COMMON ISSUES</strong><br>
-                <strong>Problem:</strong> "Pet not responding to commands"<br>
-                <strong>Solution:</strong> Check feeding status - hungry pets have reduced responsiveness<br><br>
-                
-                <strong>Problem:</strong> "Cannot claim pet - account already verified"<br>
-                <strong>Solution:</strong> Each X account can only claim one pet. Contact support for assistance<br><br>
-                
-                <strong>Problem:</strong> "Evolution not triggering despite meeting requirements"<br>
-                <strong>Solution:</strong> Evolution has random factors. Try interacting more frequently
-            </div>
-
-        </div>
-
-        <!-- Community -->
-        <div class="doc-section framed neutral" id="community">
-            <div class="section-title">11. Trainer Guidelines</div>
-            
-            <p>Digimon X tamers follow the Digimon Tamer code of conduct.</p>
-
-            <div class="success">
-                <strong>TRAINER CODE</strong><br>
-                • Share Digimon captures and victories<br>
-                • Help new trainers get started<br>
-                • Participate in tournaments<br>
-                • Report bugs and glitches<br>
-                • Respect all trainers<br>
-                • Celebrate rare captures
-            </div>
-
-            <div class="warning">
-                <strong>PROHIBITED ACTIVITIES</strong><br>
-                • Multi-account Digimon farming<br>
-                • Bot usage for farming<br>
-                • Harassment of trainers<br>
-                • Exploit abuse<br>
-                • Selling Digimon for real money<br>
-                • Impersonating gym leaders
-            </div>
-
-            <div class="info">
-                <strong>🏛️ GOVERNANCE SYSTEM</strong><br>
-                Digimon X employs a democratic governance model where community members vote on major decisions:<br>
-                • New feature priorities<br>
-                • Evolution system changes<br>
-                • Community event themes<br>
-                • Disciplinary action appeals<br>
-                • Partnership and collaboration approvals
-            </div>
-        </div>
-
-        <!-- Changelog -->
-        <div class="doc-section" id="changelog">
-            <div class="section-title">📝 12. Version History & Roadmap</div>
-            
-            <div class="code-block">
-                <div class="prompt">digimon-x --version-history</div>
-                <pre>
-> VERSION 1.0.0 (Current) - July 25, 2025 - EARLY ACCESS LAUNCH
-  ✅ Core pet management system
-  ✅ Social media auto-sharing functionality  
-  ✅ Feeding card generation system
-  ✅ Terminal-style aesthetics
-  ✅ Basic growth and evolution paths
-  ✅ Claude Sonnet AI integration
-
-> UPCOMING - VERSION 1.1.0 (Q4 2025)
-  🚧 Enhanced personality development
-  🚧 Community interaction features
-  🚧 Advanced feeding mechanics
-  🚧 Mobile-responsive optimizations
-  🚧 Performance improvements
-
-> UPCOMING - VERSION 2.0.0 (Q1 2026)
-  🚧 Digimon farming system
-  🚧 Advanced breeding mechanics  
-  🚧 Developer API release
-  🚧 Community events framework
-  🚧 Cross-platform social sharing
-                </pre>
-            </div>
-
-            <div class="info">
-                <strong>🗺️ LONG-TERM ROADMAP (2025-2026)</strong><br>
-                • <strong>Q4 2025:</strong> Enhanced AI interactions, community features<br>
-                • <strong>Q1 2026:</strong> Battle system, breeding mechanics<br>
-                • <strong>Q2 2026:</strong> Mobile app launch (iOS/Android)<br>
-                • <strong>Q3 2026:</strong> Developer API and third-party integrations<br>
-                • <strong>Q4 2026:</strong> VR/AR pet visualization experiments<br>
-                • <strong>2027+:</strong> Advanced AI storylines, cross-platform transfers
-            </div>
-
-        </div>
-
-        <!-- Footer -->
-        <div class="framed no-hd" style="margin-top: 40px; text-align: center;">
-            <div style="color: var(--digivice-green); font-size: 12px; text-transform: uppercase;">
-                Digimon X Documentation v1.0.0 | Digital Monsters Are The Champions!<br>
-                Built by Digimon Tamers<br>
-                <a href="https://x.com/digimononx" class="x-handle">@digimononx</a>
+        <div class="info-card green">
+            <div class="card-title">Important Rules</div>
+            <div class="card-text">
+                <strong>1 Digimon per Tamer</strong> &mdash; Each X account can tame one Digimon at a time.<br>
+                <strong>Your Digimon starts at Baby stage</strong> &mdash; Feed and train it to digivolve into stronger forms.<br>
+                <strong>All commands happen on X</strong> &mdash; Just reply to or mention <strong>@digimononx</strong> with a command.
             </div>
         </div>
     </div>
+
+    <!-- ── 2. ALL COMMANDS ── -->
+    <div class="doc-section" id="commands">
+        <div class="section-header">
+            <div class="section-num">2</div>
+            <div class="section-title">Commands</div>
+        </div>
+        <p class="section-text">
+            All commands work by mentioning <strong>@digimononx</strong> on X.
+            The AI agent reads your tweet and responds with a card image.
+        </p>
+
+        <div class="cmd-block">
+            <div class="cmd-header">
+                <div class="cmd-name">tame</div>
+                <span class="cmd-tag core">Core</span>
+            </div>
+            <div class="cmd-body">
+                <strong>Hatch a Digi-Egg and get your first Digimon.</strong><br>
+                A random Baby-stage Digimon will be assigned to you. You'll receive a tame card showing your new partner, its type, and evolution path.<br>
+                <div class="cmd-example">@digimononx tame</div>
+            </div>
+        </div>
+
+        <div class="cmd-block">
+            <div class="cmd-header">
+                <div class="cmd-name">feed</div>
+                <span class="cmd-tag core">Core</span>
+            </div>
+            <div class="cmd-body">
+                <strong>Feed data to your Digimon to gain XP.</strong><br>
+                Has a <strong>1-hour cooldown</strong> between feeds. Each feed gives XP and helps your Digimon grow toward digivolution.<br>
+                <div class="cmd-example">@digimononx feed</div>
+            </div>
+        </div>
+
+        <div class="cmd-block">
+            <div class="cmd-header">
+                <div class="cmd-name">check</div>
+                <span class="cmd-tag social">Info</span>
+            </div>
+            <div class="cmd-body">
+                <strong>View your Digimon's full status.</strong><br>
+                Shows name, type, level, stage, XP progress, stats (HP, ATK, DEF, SPD), win/loss record, and mood.<br>
+                <div class="cmd-example">@digimononx check</div>
+            </div>
+        </div>
+
+        <div class="cmd-block">
+            <div class="cmd-header">
+                <div class="cmd-name">battle @user</div>
+                <span class="cmd-tag combat">Combat</span>
+            </div>
+            <div class="cmd-body">
+                <strong>Challenge another tamer's Digimon to battle.</strong><br>
+                Battles are determined by <strong>level</strong>, <strong>type advantage</strong>, and some luck. The winner gains <strong>+25 XP</strong>.
+                Battle results are shown as a narrative story &mdash; no HP numbers, just the action.<br>
+                <div class="cmd-example">@digimononx battle @othertamer</div>
+            </div>
+        </div>
+
+        <div class="cmd-block">
+            <div class="cmd-header">
+                <div class="cmd-name">digivolve</div>
+                <span class="cmd-tag core">Core</span>
+            </div>
+            <div class="cmd-body">
+                <strong>Evolve your Digimon to the next stage.</strong><br>
+                Requires <strong>Level 5+</strong>. Your Digimon transforms into a stronger form. Level resets to 1 after evolution, but the new form is far more powerful.
+                Multiple evolution paths are possible &mdash; you might get a different form each time!<br>
+                <div class="cmd-example">@digimononx digivolve</div>
+            </div>
+        </div>
+
+        <div class="cmd-block">
+            <div class="cmd-header">
+                <div class="cmd-name">activity</div>
+                <span class="cmd-tag social">Social</span>
+            </div>
+            <div class="cmd-body">
+                <strong>Have your Digimon do a fun activity.</strong><br>
+                Your Digimon interacts with another tamer's Digimon for a mini social event. Earns some XP too.<br>
+                <div class="cmd-example">@digimononx activity</div>
+            </div>
+        </div>
+
+        <div class="cmd-block">
+            <div class="cmd-header">
+                <div class="cmd-name">format device / release</div>
+                <span class="cmd-tag combat">Danger</span>
+            </div>
+            <div class="cmd-body">
+                <strong>Release your Digimon and start over.</strong><br>
+                Permanently deletes your current Digimon so you can tame a new one. <strong>This cannot be undone.</strong><br>
+                <div class="cmd-example">@digimononx format device</div>
+            </div>
+        </div>
+
+        <div class="cmd-block">
+            <div class="cmd-header">
+                <div class="cmd-name">help</div>
+                <span class="cmd-tag social">Info</span>
+            </div>
+            <div class="cmd-body">
+                <strong>Get a list of all available commands.</strong><br>
+                <div class="cmd-example">@digimononx help</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── 3. EVOLUTION SYSTEM ── -->
+    <div class="doc-section" id="evolution">
+        <div class="section-header">
+            <div class="section-num">3</div>
+            <div class="section-title">Evolution System</div>
+        </div>
+        <p class="section-text">
+            Digimon evolve through 5 stages. Each stage unlocks a more powerful form with higher stats.
+            Your Digimon must reach <strong>Level 5</strong> before it can digivolve to the next stage.
+        </p>
+
+        <!-- Evolution chain showcase -->
+        <div class="evo-chain">
+            <div class="evo-stage">
+                <img src="/digimon/baby/Botamon.gif" alt="Botamon">
+                <div class="evo-label">Baby</div>
+                <div class="evo-name">Botamon</div>
+            </div>
+            <div class="evo-arrow">&rarr;</div>
+            <div class="evo-stage">
+                <img src="/digimon/child/Agumon.gif" alt="Agumon">
+                <div class="evo-label">Rookie</div>
+                <div class="evo-name">Agumon</div>
+            </div>
+            <div class="evo-arrow">&rarr;</div>
+            <div class="evo-stage">
+                <img src="/digimon/adult/Greymon.gif" alt="Greymon">
+                <div class="evo-label">Champion</div>
+                <div class="evo-name">Greymon</div>
+            </div>
+            <div class="evo-arrow">&rarr;</div>
+            <div class="evo-stage">
+                <img src="/digimon/perfect/MetalGreymon.gif" alt="MetalGreymon">
+                <div class="evo-label">Ultimate</div>
+                <div class="evo-name">MetalGreymon</div>
+            </div>
+            <div class="evo-arrow">&rarr;</div>
+            <div class="evo-stage">
+                <img src="/digimon/ultimate/WarGreymon.gif" alt="WarGreymon">
+                <div class="evo-label">Mega</div>
+                <div class="evo-name">WarGreymon</div>
+            </div>
+        </div>
+
+        <div class="info-card orange">
+            <div class="card-title">How Evolution Works</div>
+            <div class="card-text">
+                <strong>1.</strong> Feed and battle your Digimon to earn XP and level up.<br>
+                <strong>2.</strong> When your Digimon reaches <strong>Level 5+</strong>, use the <code>digivolve</code> command.<br>
+                <strong>3.</strong> Your Digimon transforms into a random evolution from its evolution tree.<br>
+                <strong>4.</strong> Level resets to 1, but your new form has <strong>much stronger base stats</strong>.<br>
+                <strong>5.</strong> Multiple evolution paths exist &mdash; the same Digimon can evolve into different forms!
+            </div>
+        </div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Stage</th>
+                    <th>Power Level</th>
+                    <th>Requirement</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong style="color:#00ccff;">Baby</strong></td>
+                    <td>Weakest &mdash; newly hatched</td>
+                    <td>Starting stage (use <code>tame</code>)</td>
+                </tr>
+                <tr>
+                    <td><strong style="color:#00ff88;">Rookie</strong></td>
+                    <td>Basic combat ready</td>
+                    <td>Digivolve at Lv.5</td>
+                </tr>
+                <tr>
+                    <td><strong style="color:#ffcc00;">Champion</strong></td>
+                    <td>Strong fighter</td>
+                    <td>Digivolve at Lv.5</td>
+                </tr>
+                <tr>
+                    <td><strong style="color:#ff6600;">Ultimate</strong></td>
+                    <td>Very powerful</td>
+                    <td>Digivolve at Lv.5</td>
+                </tr>
+                <tr>
+                    <td><strong style="color:#ff3366;">Mega</strong></td>
+                    <td>Maximum power</td>
+                    <td>Digivolve at Lv.5 (final form)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Digimon showcase per stage -->
+        <p class="section-text" style="margin-top:24px;">Some Digimon you might encounter at each stage:</p>
+        <div class="digi-showcase">
+            <div class="digi-card">
+                <img src="/digimon/baby/Poyomon.gif" alt="Poyomon">
+                <div class="digi-name">Poyomon</div>
+                <div class="digi-stage">Baby</div>
+            </div>
+            <div class="digi-card">
+                <img src="/digimon/child/Gomamon.gif" alt="Gomamon">
+                <div class="digi-name">Gomamon</div>
+                <div class="digi-stage">Rookie</div>
+            </div>
+            <div class="digi-card">
+                <img src="/digimon/adult/Angemon.gif" alt="Angemon">
+                <div class="digi-name">Angemon</div>
+                <div class="digi-stage">Champion</div>
+            </div>
+            <div class="digi-card">
+                <img src="/digimon/perfect/Angewomon.gif" alt="Angewomon">
+                <div class="digi-name">Angewomon</div>
+                <div class="digi-stage">Ultimate</div>
+            </div>
+            <div class="digi-card">
+                <img src="/digimon/ultimate/Alphamon.gif" alt="Alphamon">
+                <div class="digi-name">Alphamon</div>
+                <div class="digi-stage">Mega</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── 4. BATTLE SYSTEM ── -->
+    <div class="doc-section" id="battle">
+        <div class="section-header">
+            <div class="section-num">4</div>
+            <div class="section-title">Battle System</div>
+        </div>
+        <p class="section-text">
+            Battles are narrative-driven &mdash; you'll see a story of what happened, not raw numbers.
+            The outcome is determined by your Digimon's <strong>level</strong>, <strong>type advantage</strong>, and a bit of luck.
+        </p>
+
+        <div class="info-card red">
+            <div class="card-title">Battle Mechanics</div>
+            <div class="card-text">
+                <strong>Level Matters:</strong> A higher-level Digimon deals more damage and has more health.<br>
+                <strong>Type Advantage:</strong> Some types are super effective against others (2x damage).<br>
+                <strong>Narrative Log:</strong> Battles describe what your Digimon does &mdash; fire blasts, ice storms, shadow strikes &mdash; and explain <strong>why</strong> the winner won.<br>
+                <strong>Winner Reward:</strong> The winning Digimon earns <strong>+25 XP</strong>.<br>
+                <strong>Max 10 Rounds:</strong> If neither Digimon falls, the one with more remaining strength wins.
+            </div>
+        </div>
+
+        <div class="info-card cyan">
+            <div class="card-title">Example Battle Narrative</div>
+            <div class="card-text" style="font-style:italic; color:#6688aa;">
+                "Agumon (Lv.5 Fire) faces off against Gabumon (Lv.3 Ice)!<br><br>
+                Agumon unleashes a blazing fireball! The type advantage is overwhelming!<br>
+                Gabumon blasts a frozen beam... but the attack barely scratches the surface.<br>
+                Agumon breathes searing flames! A critical weakness is exposed!<br><br>
+                Agumon claims victory thanks to higher level (Lv.5 vs Lv.3) and Fire type advantage over Ice!
+                Gabumon retreats to recover."
+            </div>
+        </div>
+
+        <div class="digi-showcase">
+            <div class="digi-card" style="border-color:#ff333644;">
+                <img src="/digimon/child/Agumon.gif" alt="Agumon">
+                <div class="digi-name">Agumon</div>
+                <div class="digi-stage" style="color:#ff3366;">Fire Attacker</div>
+            </div>
+            <div style="display:flex;align-items:center;color:#ff6600;font-family:'Orbitron',monospace;font-size:24px;font-weight:900;">VS</div>
+            <div class="digi-card" style="border-color:#00ccff44;">
+                <img src="/digimon/child/Betamon.gif" alt="Betamon">
+                <div class="digi-name">Betamon</div>
+                <div class="digi-stage" style="color:#00ccff;">Water Defender</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── 5. TYPE SYSTEM ── -->
+    <div class="doc-section" id="types">
+        <div class="section-header">
+            <div class="section-num">5</div>
+            <div class="section-title">Type System</div>
+        </div>
+        <p class="section-text">
+            There are <strong>14 Digimon types</strong>. Each type has strengths and weaknesses against other types.
+            Understanding the type chart is key to winning battles.
+        </p>
+
+        <div class="type-grid">
+            <div class="type-chip" style="background:#F0803088;border:1px solid #F08030;">Fire</div>
+            <div class="type-chip" style="background:#6890F088;border:1px solid #6890F0;">Water</div>
+            <div class="type-chip" style="background:#78C85088;border:1px solid #78C850;">Nature</div>
+            <div class="type-chip" style="background:#F8D03088;border:1px solid #F8D030;color:#000;">Electric</div>
+            <div class="type-chip" style="background:#98D8D888;border:1px solid #98D8D8;color:#000;">Ice</div>
+            <div class="type-chip" style="background:#E0C06888;border:1px solid #E0C068;color:#000;">Earth</div>
+            <div class="type-chip" style="background:#81C4E888;border:1px solid #81C4E8;color:#000;">Wind</div>
+            <div class="type-chip" style="background:#B8B8D088;border:1px solid #B8B8D0;color:#000;">Machine</div>
+            <div class="type-chip" style="background:#FFD70088;border:1px solid #FFD700;color:#000;">Light</div>
+            <div class="type-chip" style="background:#70589888;border:1px solid #705898;">Dark</div>
+            <div class="type-chip" style="background:#A040A088;border:1px solid #A040A0;">Virus</div>
+            <div class="type-chip" style="background:#7038F888;border:1px solid #7038F8;">Dragon</div>
+            <div class="type-chip" style="background:#7038F866;border:1px solid #9060FF;">Holy Dragon</div>
+            <div class="type-chip" style="background:#A890F088;border:1px solid #A890F0;">Holy Beast</div>
+        </div>
+
+        <div class="info-card orange">
+            <div class="card-title">Type Advantage Chart</div>
+            <div class="card-text">
+                <strong style="color:#00ff88;">Super Effective (2x damage):</strong>
+            </div>
+        </div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Attacker</th>
+                    <th>Strong Against (2x)</th>
+                    <th>Weak Against (0.5x)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><strong style="color:#F08030;">Fire</strong></td><td>Nature, Machine</td><td>Dark, Water, Fire</td></tr>
+                <tr><td><strong style="color:#6890F0;">Water</strong></td><td>Fire, Earth</td><td>Water, Nature</td></tr>
+                <tr><td><strong style="color:#78C850;">Nature</strong></td><td>Water, Earth</td><td>Fire, Virus</td></tr>
+                <tr><td><strong style="color:#F8D030;">Electric</strong></td><td>Water, Wind</td><td>Electric (0x vs Earth)</td></tr>
+                <tr><td><strong style="color:#98D8D8;">Ice</strong></td><td>Nature, Wind, Dragon</td><td>Fire, Water, Ice</td></tr>
+                <tr><td><strong style="color:#E0C068;">Earth</strong></td><td>Fire, Electric, Machine</td><td>Water, Nature</td></tr>
+                <tr><td><strong style="color:#81C4E8;">Wind</strong></td><td>Nature, Earth</td><td>Machine, Electric</td></tr>
+                <tr><td><strong style="color:#B8B8D0;">Machine</strong></td><td>Nature, Wind</td><td>Fire, Water, Electric, Machine</td></tr>
+                <tr><td><strong style="color:#FFD700;">Light</strong></td><td>Dark, Virus</td><td>Light</td></tr>
+                <tr><td><strong style="color:#705898;">Dark</strong></td><td>Light</td><td>Holy Dragon, Holy Beast</td></tr>
+                <tr><td><strong style="color:#A040A0;">Virus</strong></td><td>Light, Nature</td><td>Dark, Virus</td></tr>
+                <tr><td><strong style="color:#7038F8;">Dragon</strong></td><td>Dragon</td><td>Machine</td></tr>
+                <tr><td><strong style="color:#9060FF;">Holy Dragon</strong></td><td>Dark, Fire</td><td>Holy Beast, Machine</td></tr>
+                <tr><td><strong style="color:#A890F0;">Holy Beast</strong></td><td>Dark, Virus</td><td>Light</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ── 6. FEEDING & TRAINING ── -->
+    <div class="doc-section" id="training">
+        <div class="section-header">
+            <div class="section-num">6</div>
+            <div class="section-title">Feeding & Training</div>
+        </div>
+        <p class="section-text">
+            Feeding is how your Digimon gains XP and grows stronger.
+            Each feed has a 1-hour cooldown to keep things balanced.
+        </p>
+
+        <div class="info-card green">
+            <div class="card-title">Feed Mechanics</div>
+            <div class="card-text">
+                <strong>Cooldown:</strong> 1 hour between feeds<br>
+                <strong>Effect:</strong> Grants XP, increases feed count, updates growth stage<br>
+                <strong>Goal:</strong> Level up to 5+ so you can digivolve<br>
+                <strong>Mood:</strong> Feeding keeps your Digimon happy &mdash; a happy Digimon performs better
+            </div>
+        </div>
+
+        <div class="info-card cyan">
+            <div class="card-title">XP & Leveling</div>
+            <div class="card-text">
+                <strong>Feeding:</strong> Earns XP per feed<br>
+                <strong>Battles (win):</strong> +25 XP bonus for the winner<br>
+                <strong>Activities:</strong> Small XP from social activities<br>
+                <strong>Digivolve at Lv.5:</strong> When you hit level 5, your Digimon is ready to evolve!
+            </div>
+        </div>
+    </div>
+
+    <!-- ── 7. OpenClaw AI ── -->
+    <div class="doc-section" id="openclaw">
+        <div class="section-header">
+            <div class="section-num">7</div>
+            <div class="section-title">OpenClaw AI Engine</div>
+        </div>
+
+        <div class="openclaw-banner">
+            <div class="openclaw-title">POWERED BY OPENCLAW</div>
+            <div class="openclaw-text">
+                DGMX uses <strong style="color:#cc44ff;">OpenClaw</strong>, an advanced AI engine purpose-built for on-chain digital creature simulation.
+                OpenClaw handles everything from Digimon personality generation, battle narrative creation,
+                command parsing, and dynamic evolution path computation.
+            </div>
+            <div class="hero-digimon" style="margin-top:20px;">
+                <img src="/digimon/ultimate/Apollomon.gif" alt="" style="width:56px;height:56px;image-rendering:pixelated;filter:drop-shadow(0 0 10px rgba(136,51,255,0.5));">
+                <img src="/digimon/ultimate/Chaosmon.gif" alt="" style="width:56px;height:56px;image-rendering:pixelated;filter:drop-shadow(0 0 10px rgba(136,51,255,0.5));">
+                <img src="/digimon/ultimate/Belphemon.gif" alt="" style="width:56px;height:56px;image-rendering:pixelated;filter:drop-shadow(0 0 10px rgba(136,51,255,0.5));">
+            </div>
+        </div>
+
+        <div class="info-card purple">
+            <div class="card-title">What OpenClaw Does</div>
+            <div class="card-text">
+                <strong>Command Parsing:</strong> Understands natural language &mdash; you can say "I want to feed my Digimon" or just "feed", both work.<br>
+                <strong>Battle Narratives:</strong> Generates unique battle stories for every fight &mdash; no two battles read the same.<br>
+                <strong>Digimon Personality:</strong> Each Digimon has a generated personality that affects its reactions when fed, battled, or played with.<br>
+                <strong>Smart Replies:</strong> The X agent responds contextually &mdash; it knows your Digimon's history, stage, and mood.
+            </div>
+        </div>
+
+        <div class="info-card purple">
+            <div class="card-title">Architecture</div>
+            <div class="card-text">
+                <strong>AI Layer:</strong> OpenClaw inference engine for natural language understanding<br>
+                <strong>Backend:</strong> Node.js + Express.js real-time server<br>
+                <strong>Database:</strong> SQLite3 persistent storage with volume backup<br>
+                <strong>Card Engine:</strong> Server-side canvas rendering for battle/status/tame cards<br>
+                <strong>X Integration:</strong> Twitter API v2 with OAuth 1.0a for seamless social gameplay<br>
+                <strong>Hosting:</strong> Railway cloud infrastructure with persistent volumes
+            </div>
+        </div>
+    </div>
+
+    <!-- ── 8. FAQ ── -->
+    <div class="doc-section" id="faq">
+        <div class="section-header">
+            <div class="section-num">8</div>
+            <div class="section-title">FAQ</div>
+        </div>
+
+        <div class="info-card orange">
+            <div class="card-title">How many Digimon can I have?</div>
+            <div class="card-text">
+                <strong>1 Digimon per tamer.</strong> If you want a different Digimon, use <code>format device</code> to release your current one, then <code>tame</code> again.
+            </div>
+        </div>
+
+        <div class="info-card orange">
+            <div class="card-title">How do I digivolve?</div>
+            <div class="card-text">
+                Feed and battle your Digimon until it reaches <strong>Level 5</strong>, then use the <code>digivolve</code> command. Your Digimon will evolve into a random form from its evolution tree.
+            </div>
+        </div>
+
+        <div class="info-card orange">
+            <div class="card-title">Why did I lose a battle?</div>
+            <div class="card-text">
+                Battles consider <strong>level difference</strong> and <strong>type advantage</strong>. A lower-level Digimon fighting against a type that counters it will likely lose. Check the type chart above!
+            </div>
+        </div>
+
+        <div class="info-card orange">
+            <div class="card-title">Can I choose which Digimon I tame?</div>
+            <div class="card-text">
+                No &mdash; taming is random! You get a surprise Baby-stage Digimon. The fun is discovering what you get and watching it evolve.
+            </div>
+        </div>
+
+        <div class="info-card orange">
+            <div class="card-title">How long does feeding cooldown last?</div>
+            <div class="card-text">
+                <strong>1 hour</strong> between feeds. Use this time to battle or do activities instead!
+            </div>
+        </div>
+
+        <div class="info-card orange">
+            <div class="card-title">What happens after my Digimon reaches Mega?</div>
+            <div class="card-text">
+                Mega is the final evolution stage. Your Digimon is at maximum power! Keep battling to climb the leaderboard and show off your strength.
+            </div>
+        </div>
+    </div>
+
+    <!-- ── 9. COMMUNITY ── -->
+    <div class="doc-section" id="community">
+        <div class="section-header">
+            <div class="section-num">9</div>
+            <div class="section-title">Community</div>
+        </div>
+
+        <div class="info-card green">
+            <div class="card-title">Tamer Code</div>
+            <div class="card-text">
+                <strong>Be respectful</strong> to all tamers<br>
+                <strong>No multi-accounting</strong> &mdash; one X account, one Digimon<br>
+                <strong>No botting</strong> &mdash; play fair, the AI can detect automated abuse<br>
+                <strong>Share your victories</strong> &mdash; tag #DGMX when you digivolve or win battles<br>
+                <strong>Help new tamers</strong> &mdash; explain commands and type advantages
+            </div>
+        </div>
+
+        <div class="info-card cyan">
+            <div class="card-title">Follow Us</div>
+            <div class="card-text">
+                <strong>X (Twitter):</strong> <a href="https://x.com/digimononx" style="color:#ff6600;text-decoration:none;">@digimononx</a><br>
+                Follow for updates, events, and community highlights.
+                The bot is live 24/7 &mdash; mention us anytime to play!
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ══════════ FOOTER ══════════ -->
+<div class="docs-footer">
+    <div style="color:#334455;font-size:12px;font-family:'Orbitron',monospace;text-transform:uppercase;letter-spacing:2px;">
+        DGMX Documentation<br>
+        <span style="color:#8899aa;">Digital Monster On X</span><br>
+        <a href="https://x.com/digimononx">@digimononx</a>
+        <span style="color:#334455;margin:0 8px;">|</span>
+        <a href="/">Home</a>
+    </div>
+    <div class="hero-digimon" style="margin-top:20px;">
+        <img src="/digimon/baby/Gigimon.gif" alt="" style="width:40px;height:40px;image-rendering:pixelated;opacity:0.5;">
+        <img src="/digimon/child/Coronamon.gif" alt="" style="width:40px;height:40px;image-rendering:pixelated;opacity:0.5;">
+        <img src="/digimon/adult/Birdramon.gif" alt="" style="width:40px;height:40px;image-rendering:pixelated;opacity:0.5;">
+    </div>
+</div>
+
 </body>
 </html>

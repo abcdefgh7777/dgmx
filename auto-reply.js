@@ -815,18 +815,6 @@ async function handleTame(username, tweetText, authorAvatar) {
     return { text: `@${username} no digi-eggs found in the digital world right now try again later`, image: null };
   }
 
-  // 50/50 chance of taming
-  if (Math.random() < 0.5) {
-    const failImage = await cardGen.generateFailCard(
-      { name: digimon.name, race: digimon.element, element: digimon.element, gifPath: digimon.gifPath },
-      `@${username}`
-    );
-    return {
-      text: `@${username} you tried to tame ${digimon.name} but it escaped back to the digital world. better luck next time tamer`,
-      image: failImage
-    };
-  }
-
   // Get higher-res avatar
   const avatar = (authorAvatar || '').replace('_normal', '_200x200');
   const petId = await db.createDigimon(digimon.gifPath, digimon.name, digimon.element, ownerLink, 'Happy', avatar);
@@ -1567,4 +1555,13 @@ function getDigimonElement(name) {
   return DIGIMON_ELEMENTS[(name || '').toLowerCase()] || 'Unknown';
 }
 
-module.exports = { init, startAutoReply, stopAutoReply, getAutoReplyStatus, getRecentReplies, processMention, backfillAvatars, getDigimonElement, getRandomDigimon, getRandomDigimonFromStage };
+function pollNow() {
+  if (!pollerActive) return { ok: false, error: 'Agent is not running' };
+  if (pollBusy) return { ok: false, error: 'Already checking right now, wait a moment' };
+  // Cancel the scheduled timer and run immediately
+  if (pollerTimer) { clearTimeout(pollerTimer); pollerTimer = null; }
+  poll();
+  return { ok: true, message: 'Checking mentions now' };
+}
+
+module.exports = { init, startAutoReply, stopAutoReply, getAutoReplyStatus, getRecentReplies, processMention, backfillAvatars, pollNow, getDigimonElement, getRandomDigimon, getRandomDigimonFromStage };
