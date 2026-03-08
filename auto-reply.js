@@ -629,12 +629,14 @@ function getRandomDigimonFromStage(stageName) {
   }
 }
 
-// ── Battle simulation ──
+// ── Battle simulation (narrative style) ──
 function simulateBattle(pet1, pet2) {
   const type1 = pet1.race || 'Unknown';
   const type2 = pet2.race || 'Unknown';
   const level1 = pet1.level || 1;
   const level2 = pet2.level || 1;
+  const stage1 = pet1.stage || 'Baby';
+  const stage2 = pet2.stage || 'Baby';
 
   let hp1 = 100 + (level1 * 10);
   let hp2 = 100 + (level2 * 10);
@@ -642,11 +644,54 @@ function simulateBattle(pet1, pet2) {
   const mult1to2 = getTypeMultiplier(type1, type2);
   const mult2to1 = getTypeMultiplier(type2, type1);
 
+  // Type-based attack move pools
+  const ATTACK_MOVES = {
+    Fire:     ['unleashes a blazing fireball', 'breathes searing flames', 'launches a fire tornado', 'ignites a burning strike'],
+    Water:    ['summons a tidal wave', 'blasts a hydro cannon', 'conjures a water vortex', 'strikes with aqua force'],
+    Light:    ['fires a beam of holy light', 'channels radiant energy', 'casts a divine blast', 'unleashes a shining strike'],
+    Dark:     ['strikes from the shadows', 'unleashes dark energy', 'casts a nightmare wave', 'channels forbidden power'],
+    'Holy Dragon': ['breathes sacred flames', 'charges with divine fury', 'unleashes a holy roar', 'strikes with celestial claws'],
+    'Holy Beast':  ['pounces with sacred might', 'channels holy aura', 'unleashes a divine fang', 'charges with blessed fury'],
+    Machine:  ['fires a missile barrage', 'unleashes a laser blast', 'charges with metal force', 'activates turbo cannon'],
+    Wind:     ['summons a razor gale', 'strikes with a cyclone slash', 'unleashes a sonic boom', 'rides the storm winds'],
+    Virus:    ['injects corrupted data', 'launches a virus pulse', 'strikes with glitch force', 'unleashes digital decay'],
+    Special:  ['channels mysterious energy', 'unleashes a unique technique', 'strikes with unknown force', 'activates a hidden power'],
+    Nature:   ['summons thorny vines', 'strikes with leaf blade', 'channels forest energy', 'unleashes a petal storm'],
+    Earth:    ['slams with seismic force', 'hurls a massive boulder', 'triggers a ground shatter', 'charges with tectonic power'],
+    Electric: ['fires a thunderbolt', 'channels a lightning surge', 'unleashes an electric storm', 'strikes with volt tackle'],
+    Ice:      ['blasts a frozen beam', 'summons an ice storm', 'strikes with glacial force', 'unleashes a blizzard wave'],
+    Dragon:   ['breathes dragonfire', 'charges with draconic fury', 'unleashes a dragon pulse', 'strikes with ancient power'],
+    Unknown:  ['launches a fierce attack', 'strikes with raw power', 'charges forward', 'unleashes energy'],
+  };
+
+  const DODGE_PHRASES = [
+    'dodges swiftly but takes a glancing hit',
+    'tries to counter but gets pushed back',
+    'braces for impact',
+    'stands firm against the blow',
+  ];
+
+  const SUPER_EFF_PHRASES = [
+    'The attack lands with devastating force!',
+    'A critical weakness is exposed!',
+    'The type advantage is overwhelming!',
+    'It strikes right at the weak point!',
+  ];
+
+  const NOT_EFF_PHRASES = [
+    'but the attack barely scratches the surface.',
+    'but the opponent shrugs it off easily.',
+    'but the damage is greatly reduced.',
+    'but the type mismatch weakens the blow.',
+  ];
+
+  const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
   const log = [];
   let round = 0;
   let attacker = Math.random() > 0.5 ? 1 : 2;
 
-  log.push(`${pet1.name} (${type1}) vs ${pet2.name} (${type2})`);
+  log.push(`${pet1.name} (Lv.${level1} ${type1}) faces off against ${pet2.name} (Lv.${level2} ${type2})!`);
 
   while (hp1 > 0 && hp2 > 0 && round < 10) {
     round++;
@@ -654,22 +699,51 @@ function simulateBattle(pet1, pet2) {
       const baseDmg = 15 + Math.floor(Math.random() * 10) + level1 * 2;
       const dmg = Math.floor(baseDmg * mult1to2);
       hp2 = Math.max(0, hp2 - dmg);
-      const eff = mult1to2 > 1 ? ' super effective!' : mult1to2 < 1 ? ' not very effective...' : '';
-      log.push(`${pet1.name} attacks! -${dmg} HP${eff}`);
+      const move = pick(ATTACK_MOVES[type1] || ATTACK_MOVES['Unknown']);
+      let line = `${pet1.name} ${move}!`;
+      if (mult1to2 > 1) {
+        line += ` ${pick(SUPER_EFF_PHRASES)}`;
+      } else if (mult1to2 < 1) {
+        line += ` ${pick(NOT_EFF_PHRASES)}`;
+      } else {
+        line += ` ${pet2.name} ${pick(DODGE_PHRASES)}.`;
+      }
+      log.push(line);
       attacker = 2;
     } else {
       const baseDmg = 15 + Math.floor(Math.random() * 10) + level2 * 2;
       const dmg = Math.floor(baseDmg * mult2to1);
       hp1 = Math.max(0, hp1 - dmg);
-      const eff = mult2to1 > 1 ? ' super effective!' : mult2to1 < 1 ? ' not very effective...' : '';
-      log.push(`${pet2.name} attacks! -${dmg} HP${eff}`);
+      const move = pick(ATTACK_MOVES[type2] || ATTACK_MOVES['Unknown']);
+      let line = `${pet2.name} ${move}!`;
+      if (mult2to1 > 1) {
+        line += ` ${pick(SUPER_EFF_PHRASES)}`;
+      } else if (mult2to1 < 1) {
+        line += ` ${pick(NOT_EFF_PHRASES)}`;
+      } else {
+        line += ` ${pet1.name} ${pick(DODGE_PHRASES)}.`;
+      }
+      log.push(line);
       attacker = 1;
     }
   }
 
   const winner = hp1 > 0 ? pet1 : pet2;
   const loser = hp1 > 0 ? pet2 : pet1;
-  log.push(`${winner.name} wins with ${hp1 > 0 ? hp1 : hp2} HP left!`);
+  const winLevel = hp1 > 0 ? level1 : level2;
+  const loseLevel = hp1 > 0 ? level2 : level1;
+  const winType = hp1 > 0 ? type1 : type2;
+  const loseType = hp1 > 0 ? type2 : type1;
+  const winMult = hp1 > 0 ? mult1to2 : mult2to1;
+
+  // Build reason for winning
+  const reasons = [];
+  if (winLevel > loseLevel) reasons.push(`higher level (Lv.${winLevel} vs Lv.${loseLevel})`);
+  if (winMult > 1) reasons.push(`${winType} type advantage over ${loseType}`);
+  if (winLevel <= loseLevel && winMult <= 1) reasons.push('superior battle strategy');
+
+  const reasonStr = reasons.length > 0 ? reasons.join(' and ') : 'outlasting the opponent';
+  log.push(`${winner.name} claims victory thanks to ${reasonStr}! ${loser.name} retreats to recover.`);
 
   return { winner, loser, log: log.join('\n'), hp1, hp2 };
 }

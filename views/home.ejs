@@ -124,12 +124,13 @@
         /* ── Banner Header ── */
         .banner-section {
             text-align: center;
-            padding: 20px 0;
+            padding: 0;
+            overflow: hidden;
         }
         .banner-section img {
-            max-width: 100%;
-            max-height: 200px;
-            object-fit: contain;
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
             image-rendering: auto;
         }
         .system-subtitle {
@@ -410,7 +411,7 @@
         <!-- Banner Header -->
         <div class="digivice-screen banner-section">
             <img src="/banner.gif" alt="DIGIMON X">
-            <div class="system-subtitle">デジタルモンスター ネットワーク &nbsp; | &nbsp; TAMER NETWORK ONLINE</div>
+            <div class="system-subtitle" style="padding: 12px 0;">デジタルモンスター ネットワーク &nbsp; | &nbsp; TAMER NETWORK ONLINE</div>
         </div>
 
         <!-- Agent Activity Log -->
@@ -445,8 +446,12 @@
                     groups[trainer] = {
                         ownerHandle: trainer,
                         ownerLink: pet.owner,
+                        avatar: pet.avatar || '',
                         digimon: []
                     };
+                }
+                if (!groups[trainer].avatar && pet.avatar) {
+                    groups[trainer].avatar = pet.avatar;
                 }
                 groups[trainer].digimon.push(pet);
                 return groups;
@@ -459,7 +464,7 @@
                     <div class="tamer-group" data-trainer="<%= group.ownerHandle.toLowerCase() %>">
                         <!-- Tamer Profile -->
                         <div class="tamer-header" style="border-radius: 8px 8px 0 0; margin: 0 0 0 0;">
-                            <img src="/user.png" alt="Tamer" class="tamer-avatar">
+                            <img src="<%= group.avatar || '/user.png' %>" alt="Tamer" class="tamer-avatar" onerror="this.src='/user.png'">
                             <div class="tamer-details">
                                 <h3><a href="<%= group.ownerLink %>" target="_blank"><%= group.ownerHandle %></a></h3>
                                 <div class="tamer-stats">

@@ -27,7 +27,22 @@
       "Bash(git config:*)",
       "Bash(git ls-remote:*)",
       "Bash(winget install:*)",
-      "Bash(export:*)"
+      "Bash(export:*)",
+      "Bash(npm list:*)",
+      "Bash(railway whoami:*)",
+      "Bash(npm ls:*)",
+      "Bash(railway project:*)",
+      "Bash(railway init:*)",
+      "Bash(railway service:*)",
+      "Bash(railway help:*)",
+      "Bash(railway add:*)",
+      "Bash(railway volume:*)",
+      "Bash(python3:*)",
+      "Bash(railway.exe volume:*)",
+      "Bash(MSYS_NO_PATHCONV=1 railway volume:*)",
+      "Bash(railway variable:*)",
+      "Bash(railway up:*)",
+      "Bash(railway logs:*)"
     ],
     "deny": [],
     "ask": []

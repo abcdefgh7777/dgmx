@@ -471,11 +471,29 @@ app.post('/api/admin/agent/test', requireAuth, async (req, res) => {
     const testUsername = (username || 'testuser').replace(/^@/, '');
     const tweetText = `@${process.env.X_BOT_USERNAME || 'digimononx'} ${message}`;
 
+    // Try to fetch real X profile image for the test username
+    let authorAvatar = '';
+    if (testUsername !== 'testuser' && process.env.X_BEARER_TOKEN) {
+      try {
+        const axios = require('axios');
+        const userRes = await axios.get(`https://api.twitter.com/2/users/by/username/${testUsername}`, {
+          headers: { Authorization: `Bearer ${decodeURIComponent(process.env.X_BEARER_TOKEN)}` },
+          params: { 'user.fields': 'profile_image_url' },
+          timeout: 5000,
+        });
+        const avatarUrl = userRes.data?.data?.profile_image_url || '';
+        authorAvatar = avatarUrl.replace('_normal', '_200x200');
+        if (authorAvatar) console.log(`[TEST] Fetched avatar for @${testUsername}: ${authorAvatar}`);
+      } catch (e) {
+        console.log(`[TEST] Could not fetch avatar for @${testUsername}: ${e.message}`);
+      }
+    }
+
     const fakeTweet = {
       id: 'test_' + Date.now(),
       text: tweetText,
       authorUsername: testUsername,
-      authorAvatar: '',
+      authorAvatar: authorAvatar,
       createdAt: new Date().toISOString(),
     };
 

@@ -3,7 +3,8 @@ const path = require('path');
 
 class Database {
   constructor() {
-    this.db = new sqlite3.Database(path.join(__dirname, 'pets.db'));
+    const dbDir = process.env.RAILWAY_VOLUME_MOUNT_PATH || __dirname;
+    this.db = new sqlite3.Database(path.join(dbDir, 'pets.db'));
     this.init();
   }
 

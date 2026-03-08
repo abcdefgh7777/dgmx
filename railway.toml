@@ -1,0 +1,12 @@
+[build]
+builder = "nixpacks"
+
+[build.nixpacks]
+aptPkgs = ["build-essential", "libcairo2-dev", "libjpeg-dev", "libpango1.0-dev", "libgif-dev", "librsvg2-dev", "pkg-config", "python3"]
+
+[deploy]
+startCommand = "node server.js"
+healthcheckPath = "/"
+healthcheckTimeout = 300
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 5
