@@ -28,7 +28,7 @@ autoReply.init(db, aiClient);
 // Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret: 'ascii-pet-secret',
   resave: false,
